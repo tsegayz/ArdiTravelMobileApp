@@ -29,3 +29,8 @@ flutter:
     - family: cambo
       fonts:
         - asset: fonts/Cambo/Cambo-Regular.ttf
+    - family: lobster
+      fonts:
+          - asset: fonts/Lobster/Lobster-Regular.ttf
+
+        
