@@ -10,7 +10,8 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
-  slide_to_act: ^2.0.2
+  swipeable_button_view: ^0.0.2
+  page_transition: ^2.1.0
 
 dev_dependencies:
   flutter_test:
