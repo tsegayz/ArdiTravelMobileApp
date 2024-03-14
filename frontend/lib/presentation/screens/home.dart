@@ -148,13 +148,19 @@ class _HomeState extends State<Home> {
           ),
         ),
         leading: Padding(
-          padding: const EdgeInsets.only(top: 17.0),
-          child: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: Colors.black,
-            size: 16,
+            padding: const EdgeInsets.only(top: 17.0),
+            child: IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Colors.black,
+                size: 16,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); 
+              },
+            ),
           ),
-        ),
+
         actions: [
           Padding(
             padding: const EdgeInsets.only(top: 5.0),
