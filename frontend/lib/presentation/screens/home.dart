@@ -134,26 +134,33 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
         titleSpacing: 0,
         title: Padding(
-          padding: const EdgeInsets.only(top: 30.0, left: 30),
+          padding: const EdgeInsets.only(top: 16.0),
           child: Text(
             'Ardi Travel',
             style: TextStyle(
               fontFamily: 'lobster',
-              fontSize: 26,
+              fontSize: 24,
               color: const Color.fromARGB(255, 0, 0, 0),
             ),
           ),
         ),
+        leading: Padding(
+          padding: const EdgeInsets.only(top: 17.0),
+          child: Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Colors.black,
+            size: 16,
+          ),
+        ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(top: 25.0),
+            padding: const EdgeInsets.only(top: 5.0),
             child: Container(
                 width: 33,
-                height: 35,
+                height: 30,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(5),
@@ -166,7 +173,11 @@ class _HomeState extends State<Home> {
                     ),
                   ],
                 ),
-                child: Center(child: Icon(Icons.notifications_none_rounded))),
+                child: Center(
+                    child: Icon(
+                  Icons.notifications_none_rounded,
+                  size: 20,
+                ))),
           ),
           SizedBox(width: 20),
         ],
@@ -329,122 +340,111 @@ class _HomeState extends State<Home> {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 30.0),
+                    padding:  EdgeInsets.only(left: 30.0),
                     child: Row(
                       children: List.generate(
                         attractions.length,
                         (index) => Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          padding:  EdgeInsets.symmetric(horizontal: 15.0),
                           child: GestureDetector(
                             onTap: () {
-                              setState(() {});
+                              Navigator.pushNamed(context, '/location');
                             },
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.pushNamed(context, '/location');
-                              },
-                              child: Container(
-                                height: 280,
-                                width: 200,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: SizedBox(
-                                    width: 207,
-                                    height: 275,
-                                    child: Stack(
-                                      children: [
-                                        Image.asset(
-                                          attractions[index]
-                                              .img, // Use imgUrl instead of img
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                          height: double.infinity,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: SizedBox(
+                                width: 207,
+                                height: 275,
+                                child: Stack(
+                                  children: [
+                                    Image.asset(
+                                      attractions[index]
+                                          .img, 
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                    ),
+                                    Positioned(
+                                      bottom: 13,
+                                      left: 10,
+                                      child: Container(
+                                        width: 180,
+                                        padding: EdgeInsets.all(2),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: const Color.fromARGB(
+                                              255, 255, 255, 255),
                                         ),
-                                        Positioned(
-                                          bottom: 13,
-                                          left: 10,
-                                          child: Container(
-                                            width: 180,
-                                            padding: EdgeInsets.all(2),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: const Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                            ),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      8, 1, 8, 7),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    attractions[index].title,
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        fontFamily:
-                                                            'Times New Roman',
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.black),
-                                                  ),
-                                                  Text(
-                                                    attractions[index].descr,
-                                                    style: TextStyle(
-                                                      fontSize: 11,
-                                                      fontFamily:
-                                                          'Times New Roman',
-                                                      color: Color.fromARGB(
-                                                          255, 122, 122, 122),
-                                                    ),
-                                                  ),
-                                                ],
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.fromLTRB(
+                                                  8, 1, 8, 7),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                attractions[index].title,
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontFamily:
+                                                        'Times New Roman',
+                                                    fontWeight:
+                                                        FontWeight.bold,
+                                                    color: Colors.black),
                                               ),
-                                            ),
+                                              Text(
+                                                attractions[index].descr,
+                                                style: TextStyle(
+                                                  fontSize: 11,
+                                                  fontFamily:
+                                                      'Times New Roman',
+                                                  color: Color.fromARGB(
+                                                      255, 122, 122, 122),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        Positioned(
-                                          bottom: 53,
-                                          right: 25,
-                                          child: Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                color: const Color.fromARGB(
-                                                    255, 255, 255, 255),
-                                              ),
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 3,
-                                                    right: 4,
-                                                    bottom: 4),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.star,
-                                                      color: Colors.amber,
-                                                      size: 12,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 2,
-                                                    ),
-                                                    Text(
-                                                      attractions[index].rating,
-                                                      style: TextStyle(
-                                                          fontSize: 10,
-                                                          color: Colors.black),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )),
-                                        ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
+                                    Positioned(
+                                      bottom: 53,
+                                      right: 25,
+                                      child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 3,
+                                                right: 4,
+                                                bottom: 4),
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                  size: 12,
+                                                ),
+                                                SizedBox(
+                                                  width: 2,
+                                                ),
+                                                Text(
+                                                  attractions[index].rating,
+                                                  style: TextStyle(
+                                                      fontSize: 10,
+                                                      color: Colors.black),
+                                                ),
+                                              ],
+                                            ),
+                                          )),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
