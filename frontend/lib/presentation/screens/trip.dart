@@ -1,9 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors_in_immutables
 // ignore_for_file: use_key_in_widget_constructors
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Category {
   final String region;
@@ -758,8 +756,8 @@ class _TripState extends State<Trip> {
               ],
             ),
             SizedBox(
-                  height: 20,
-                ),
+              height: 20,
+            ),
             Column(
               children: [
                 Row(
@@ -793,7 +791,7 @@ class _TripState extends State<Trip> {
                               setState(() {});
                             },
                             child: Container(
-                              width: 180,
+                                width: 180,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
                                   color: Color.fromARGB(255, 255, 255, 255),
@@ -809,8 +807,7 @@ class _TripState extends State<Trip> {
                                 child: Row(
                                   children: [
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 8.0),
+                                      padding: const EdgeInsets.only(left: 8.0),
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(8),
                                         child: SizedBox(

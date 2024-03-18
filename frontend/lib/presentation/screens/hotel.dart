@@ -1,11 +1,522 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors_in_immutables
 // ignore_for_file: use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
-class Hotel extends StatelessWidget {
+class Category {
+  final String region;
+  final dynamic flag;
+
+  Category({
+    required this.region,
+    required this.flag,
+  });
+}
+
+class Attraction {
+  final String img;
+  final String title;
+  final String descr;
+  final String rating;
+
+  Attraction(
+      {required this.img,
+      required this.title,
+      required this.descr,
+      required this.rating});
+}
+
+class BottomBar {
+  final IconData icon;
+  final String title;
+
+  BottomBar({required this.icon, required this.title});
+}
+
+class _FlagClipper extends CustomClipper<Path> {
+  const _FlagClipper(this.radius);
+
+  final double radius;
+
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    final center = Offset(size.width / 2, size.height / 2);
+
+    path.addOval(Rect.fromCircle(center: center, radius: radius));
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
+class Hotel extends StatefulWidget {
+  @override
+  State<Hotel> createState() => _HotelState();
+}
+
+class _HotelState extends State<Hotel> {
+  final List<Category> countries = [
+    Category(
+      region: 'all',
+      flag: Icons.apps,
+    ),
+    Category(
+      region: 'Asia',
+      flag: '🇨🇳',
+    ),
+    Category(
+      region: 'Europe',
+      flag: '🇫🇷',
+    ),
+    Category(
+      region: 'Africa',
+      flag: '🇿🇦',
+    ),
+    Category(
+      region: 'Americas',
+      flag: '🇺🇸',
+    ),
+    Category(
+      region: 'Oceania',
+      flag: '🇦🇺',
+    ),
+  ];
+
+  final List<Attraction> attractions = [
+    Attraction(
+        img: 'assets/welcome.jpg',
+        title: 'Waterfall',
+        descr: 'Lorem ipsum dolor sit amet',
+        rating: '4.6'),
+    Attraction(
+        img: 'assets/asella.jpeg',
+        title: 'Watterfall',
+        descr: 'Lorem ipsum dolor sit amet ',
+        rating: '4.6'),
+    Attraction(
+        img: 'assets/asella.jpeg',
+        title: 'Watterfall',
+        descr: 'Lorem ipsum dolor sit amet ',
+        rating: '4.6'),
+    Attraction(
+        img: 'assets/asella.jpeg',
+        title: 'Watterfall',
+        descr: 'Lorem ipsum dolor sit amet ',
+        rating: '4.6'),
+    Attraction(
+        img: 'assets/asella.jpeg',
+        title: 'Watterfall',
+        descr: 'Lorem ipsum dolor sit amet ',
+        rating: '4.6'),
+    Attraction(
+        img: 'assets/asella.jpeg',
+        title: 'Watterfall',
+        descr: 'Lorem ipsum dolor sit amet ',
+        rating: '4.6'),
+  ];
+
+  int selectedIndex = 0; // Track the selected index for category/regin
+
+  final List<BottomBar> bars = [
+    BottomBar(icon: Icons.home_rounded, title: 'Home'),
+    BottomBar(icon: Icons.album_outlined, title: 'Artists'),
+    BottomBar(icon: Icons.music_note_rounded, title: 'Songs'),
+    BottomBar(icon: Icons.album_outlined, title: 'Albums'),
+    BottomBar(icon: Icons.person_outline, title: 'Account'),
+  ];
+
+  int selected = 2; // Track the selected index for bottom nav bar
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        titleSpacing: 0,
+        title: Padding(
+          padding: const EdgeInsets.only(top: 16.0),
+          child: Text(
+            'Ardi Travel',
+            style: TextStyle(
+              fontFamily: 'lobster',
+              fontSize: 24,
+              color: const Color.fromARGB(255, 0, 0, 0),
+            ),
+          ),
+        ),
+        leading: Padding(
+          padding: const EdgeInsets.only(top: 17.0),
+          child: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: Colors.black,
+              size: 16,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(top: 5.0),
+            child: Container(
+                width: 33,
+                height: 30,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 0,
+                      blurRadius: 3,
+                      offset: Offset(1, 1),
+                    ),
+                  ],
+                ),
+                child: Center(
+                    child: Icon(
+                  Icons.notifications_none_rounded,
+                  size: 20,
+                ))),
+          ),
+          SizedBox(width: 20),
+        ],
+      ),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 32, top: 30),
+              child: Text(
+                'Discover',
+                style: TextStyle(
+                  fontSize: 20,
+                  height: 1,
+                  fontFamily: 'cambo',
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 32),
+              child: Text(
+                'hotel of your choice',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'cambo',
+                ),
+              ),
+            ),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 30, right: 10),
+                    width: 280,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color.fromARGB(255, 134, 134, 134)
+                              .withOpacity(0.5),
+                          spreadRadius: 1,
+                          blurRadius: 1,
+                          offset: Offset(0, 0),
+                        ),
+                      ],
+                      color: Color.fromARGB(255, 255, 255, 255),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Icon(
+                            Icons.search_rounded,
+                            color: Colors.grey,
+                            size: 25,
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(bottom: 12, left: 10),
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: 'Discover a location.....',
+                                  border: InputBorder.none,
+                                  hintStyle: TextStyle(
+                                    color:  Color.fromARGB(
+                                        255, 192, 192, 192),
+                                    fontSize: 15,
+                                    fontFamily: 'cambo',
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color.fromARGB(255, 134, 134, 134)
+                              .withOpacity(0.5),
+                          spreadRadius: 1,
+                          blurRadius: 1,
+                          offset: Offset(0, 0),
+                        ),
+                      ],
+                      color: Color(0xFF2A4244),
+                    ),
+                    child: Icon(
+                      Icons.apps_rounded,
+                      color: Colors.white,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 38,
+            ),
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 28.0),
+                      child: Text(
+                        'Popular',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'cambo',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 30.0),
+                    child: Row(
+                      children: List.generate(
+                        attractions.length,
+                        (index) => Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/location');
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: SizedBox(
+                                width: 80,
+                                height: 80,
+                                child: Stack(
+                                  children: [
+                                    Image.asset(
+                                      attractions[index].img,
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 27,
+            ),
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 28.0),
+                      child: Text(
+                        'All per your need ',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'cambo',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+                  child: SizedBox(
+                    height: 300,
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 20.0,
+                      ),
+                      itemCount: attractions.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/hotel');
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 9.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(30),
+                              child: Stack(
+                                children: [
+                                  Image.asset(
+                                    attractions[index].img,
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                  ),
+                                  Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    color: Color.fromARGB(131, 0, 0, 0),
+                                  ),
+                                  Positioned(
+                                    bottom: 13,
+                                    left: 4,
+                                    child: Container(
+                                      width: 190,
+                                      padding: EdgeInsets.all(2),
+                                      child: Padding(
+                                        padding: EdgeInsets.fromLTRB(8, 1, 8, 7),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              attractions[index].title,
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontFamily: 'Times New Roman',
+                                                  color: Colors.white),
+                                            ),
+                                            Text(
+                                              'Lorem ipsum dolor sit amet, consectetur',
+                                              style: TextStyle(
+                                                  fontSize: 9,
+                                                  color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right: 18,
+                                    top: 20,
+                                    child: Container(
+                                      width: 26,
+                                      height: 26,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                      child: Stack(
+                                        children: [
+                                          Center(
+                                            child: Icon(
+                                              size: 18,
+                                              Icons.favorite_border,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(18, 0, 18, 15),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(60),
+            color: Color(0xFF2A4244),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 19.0),
+            child: NavigationBar(
+              height: 30,
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              selectedIndex: selected,
+              destinations: [
+                NavigationDestination(
+                  icon: Icon(
+                    Icons.home_outlined,
+                    color: Colors.white,
+                  ),
+                  label: '',
+                ),
+                NavigationDestination(
+                    icon: Icon(Icons.camera_alt, color: Colors.white),
+                    label: ''),
+                NavigationDestination(
+                  icon: Icon(
+                    Icons.luggage_outlined,
+                  ),
+                  label: '',
+                ),
+                NavigationDestination(
+                    icon:
+                        Icon(Icons.person_outline_rounded, color: Colors.white),
+                    label: ''),
+              ],
+              onDestinationSelected: (index) {
+                Navigator.of(context)
+                    .pushNamed(['/home', '/trip', '/hotel', '/profile'][index]);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
