@@ -579,9 +579,10 @@ class _HomeState extends State<Home> {
           child: Padding(
             padding: const EdgeInsets.only(top: 19.0),
             child: NavigationBar(
-              height: 40,
+              height: 30,
               elevation: 0,
               backgroundColor: Colors.transparent,
+              selectedIndex: selected,
               destinations: [
                 NavigationDestination(
                   icon: Icon(
