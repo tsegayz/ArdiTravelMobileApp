@@ -33,33 +33,12 @@ class BottomBar {
   BottomBar({required this.icon, required this.title});
 }
 
-class _FlagClipper extends CustomClipper<Path> {
-  const _FlagClipper(this.radius);
-
-  final double radius;
-
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-    final center = Offset(size.width / 2, size.height / 2);
-
-    path.addOval(Rect.fromCircle(center: center, radius: radius));
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-}
-
 class Hotel extends StatefulWidget {
   @override
   State<Hotel> createState() => _HotelState();
 }
 
 class _HotelState extends State<Hotel> {
-
-
   final List<Attraction> attractions = [
     Attraction(
         img: 'assets/welcome.jpg',
@@ -95,7 +74,7 @@ class _HotelState extends State<Hotel> {
 
   int selectedIndex = 0; // Track the selected index for category/regin
 
-  int selected = 3; // Track the selected index for bottom nav bar
+  int selected = 2; // Track the selected index for bottom nav bar
 
   @override
   Widget build(BuildContext context) {
@@ -221,8 +200,7 @@ class _HotelState extends State<Hotel> {
                                   hintText: 'Discover a location.....',
                                   border: InputBorder.none,
                                   hintStyle: TextStyle(
-                                    color:  Color.fromARGB(
-                                        255, 192, 192, 192),
+                                    color: Color.fromARGB(255, 192, 192, 192),
                                     fontSize: 15,
                                     fontFamily: 'cambo',
                                   ),
@@ -341,7 +319,8 @@ class _HotelState extends State<Hotel> {
                 ),
                 SizedBox(height: 15),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
                   child: SizedBox(
                     height: 300,
                     child: GridView.builder(
@@ -379,7 +358,8 @@ class _HotelState extends State<Hotel> {
                                       width: 190,
                                       padding: EdgeInsets.all(2),
                                       child: Padding(
-                                        padding: EdgeInsets.fromLTRB(8, 1, 8, 7),
+                                        padding:
+                                            EdgeInsets.fromLTRB(8, 1, 8, 7),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -476,8 +456,8 @@ class _HotelState extends State<Hotel> {
                     label: ''),
               ],
               onDestinationSelected: (index) {
-                Navigator.of(context)
-                    .pushNamed(['/home', '/trip', '/hotel', '/restaurant'][index]);
+                Navigator.of(context).pushNamed(
+                    ['/home', '/trip', '/hotel', '/restaurant'][index]);
               },
             ),
           ),

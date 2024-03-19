@@ -896,7 +896,7 @@ class _TripState extends State<Trip> {
               ],
               onDestinationSelected: (index) {
                 Navigator.of(context)
-                    .pushNamed(['/home', '/trip', '/hotel', '/profile'][index]);
+                    .pushNamed(['/home', '/trip', '/hotel', '/restaurant'][index]);
               },
             ),
           ),

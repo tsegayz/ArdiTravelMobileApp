@@ -440,7 +440,7 @@ class _RestaurantState extends State<Restaurant> {
                           padding: EdgeInsets.symmetric(horizontal: 15.0),
                           child: GestureDetector(
                             onTap: () {
-                              Navigator.pushNamed(context, '/location');
+                              Navigator.pushNamed(context, '/restaurantDetail');
                             },
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
