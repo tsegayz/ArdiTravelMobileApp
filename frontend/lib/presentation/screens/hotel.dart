@@ -2,7 +2,6 @@
 // ignore_for_file: use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Category {
   final String region;
@@ -59,32 +58,7 @@ class Hotel extends StatefulWidget {
 }
 
 class _HotelState extends State<Hotel> {
-  final List<Category> countries = [
-    Category(
-      region: 'all',
-      flag: Icons.apps,
-    ),
-    Category(
-      region: 'Asia',
-      flag: '🇨🇳',
-    ),
-    Category(
-      region: 'Europe',
-      flag: '🇫🇷',
-    ),
-    Category(
-      region: 'Africa',
-      flag: '🇿🇦',
-    ),
-    Category(
-      region: 'Americas',
-      flag: '🇺🇸',
-    ),
-    Category(
-      region: 'Oceania',
-      flag: '🇦🇺',
-    ),
-  ];
+
 
   final List<Attraction> attractions = [
     Attraction(
@@ -121,15 +95,7 @@ class _HotelState extends State<Hotel> {
 
   int selectedIndex = 0; // Track the selected index for category/regin
 
-  final List<BottomBar> bars = [
-    BottomBar(icon: Icons.home_rounded, title: 'Home'),
-    BottomBar(icon: Icons.album_outlined, title: 'Artists'),
-    BottomBar(icon: Icons.music_note_rounded, title: 'Songs'),
-    BottomBar(icon: Icons.album_outlined, title: 'Albums'),
-    BottomBar(icon: Icons.person_outline, title: 'Account'),
-  ];
-
-  int selected = 2; // Track the selected index for bottom nav bar
+  int selected = 3; // Track the selected index for bottom nav bar
 
   @override
   Widget build(BuildContext context) {
@@ -511,7 +477,7 @@ class _HotelState extends State<Hotel> {
               ],
               onDestinationSelected: (index) {
                 Navigator.of(context)
-                    .pushNamed(['/home', '/trip', '/hotel', '/profile'][index]);
+                    .pushNamed(['/home', '/trip', '/hotel', '/restaurant'][index]);
               },
             ),
           ),

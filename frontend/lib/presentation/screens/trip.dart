@@ -74,14 +74,6 @@ class _TripState extends State<Trip> {
 
   int selectedIndex = 0; // Track the selected index for category/regin
 
-  final List<BottomBar> bars = [
-    BottomBar(icon: Icons.home_rounded, title: 'Home'),
-    BottomBar(icon: Icons.album_outlined, title: 'Artists'),
-    BottomBar(icon: Icons.music_note_rounded, title: 'Songs'),
-    BottomBar(icon: Icons.album_outlined, title: 'Albums'),
-    BottomBar(icon: Icons.person_outline, title: 'Account'),
-  ];
-
   int selected = 1; // Track the selected index for bottom nav bar
 
   @override

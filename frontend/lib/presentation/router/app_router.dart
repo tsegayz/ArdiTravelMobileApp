@@ -33,7 +33,7 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => HotelDetail());
       case '/location':
         return MaterialPageRoute(builder: (_) => Location());
-      case 'restaurant/':
+      case '/restaurant':
         return MaterialPageRoute(builder: (_) => Restaurant());
       case '/trip':
         return MaterialPageRoute(builder: (_) => Trip());

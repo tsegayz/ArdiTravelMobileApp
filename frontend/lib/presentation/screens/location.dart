@@ -37,25 +37,6 @@ class BottomBar {
   BottomBar({required this.icon, required this.title});
 }
 
-class _FlagClipper extends CustomClipper<Path> {
-  const _FlagClipper(this.radius);
-
-  final double radius;
-
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-    final center = Offset(size.width / 2, size.height / 2);
-
-    path.addOval(Rect.fromCircle(center: center, radius: radius));
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-}
-
 class Location extends StatefulWidget {
   @override
   State<Location> createState() => _LocationState();
@@ -123,14 +104,6 @@ class _LocationState extends State<Location> {
   ];
 
   int selectedIndex = 0; // Track the selected index for category/regin
-
-  final List<BottomBar> bars = [
-    BottomBar(icon: Icons.home_rounded, title: 'Home'),
-    BottomBar(icon: Icons.album_outlined, title: 'Artists'),
-    BottomBar(icon: Icons.music_note_rounded, title: 'Songs'),
-    BottomBar(icon: Icons.album_outlined, title: 'Albums'),
-    BottomBar(icon: Icons.person_outline, title: 'Account'),
-  ];
 
   int selected = 1; // Track the selected index for bottom nav bar
 

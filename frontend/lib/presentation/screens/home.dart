@@ -120,14 +120,6 @@ class _HomeState extends State<Home> {
 
   int selectedIndex = 0; // Track the selected index for category/regin
 
-  final List<BottomBar> bars = [
-    BottomBar(icon: Icons.home_rounded, title: 'Home'),
-    BottomBar(icon: Icons.album_outlined, title: 'Artists'),
-    BottomBar(icon: Icons.music_note_rounded, title: 'Songs'),
-    BottomBar(icon: Icons.album_outlined, title: 'Albums'),
-    BottomBar(icon: Icons.person_outline, title: 'Account'),
-  ];
-
   int selected = 0; // Track the selected index for bottom nav bar
 
   @override
@@ -604,7 +596,7 @@ class _HomeState extends State<Home> {
               ],
               onDestinationSelected: (index) {
                 Navigator.of(context)
-                    .pushNamed(['/home', '/trip', '/hotel', '/profile'][index]);
+                    .pushNamed(['/home', '/trip', '/hotel', '/restaurant'][index]);
               },
             ),
           ),
