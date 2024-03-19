@@ -1,9 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors_in_immutables
 // ignore_for_file: use_key_in_widget_constructors
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Category {
   final String region;
@@ -91,7 +89,6 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
 
   int selectedIndex = 0; // Track the selected index for category/regin
 
-  int selected = 3; // Track the selected index for bottom nav bar
 
   @override
   Widget build(BuildContext context) {
@@ -462,43 +459,6 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
               height: 25,
             )
           ],
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(18, 0, 18, 15),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(60),
-            color: Color(0xFF2A4244),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 19.0),
-            child: NavigationBar(
-              height: 30,
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              selectedIndex: selected,
-              destinations: [
-                NavigationDestination(
-                  icon: Icon(Icons.home_outlined, color: Colors.white),
-                  label: '',
-                ),
-                NavigationDestination(
-                    icon: Icon(Icons.camera_alt, color: Colors.white),
-                    label: ''),
-                NavigationDestination(
-                  icon: Icon(Icons.luggage_outlined, color: Colors.white),
-                  label: '',
-                ),
-                NavigationDestination(
-                    icon: Icon(Icons.person_outline_rounded), label: ''),
-              ],
-              onDestinationSelected: (index) {
-                Navigator.of(context).pushNamed(
-                    ['/home', '/trip', '/hotel', '/restaurant'][index]);
-              },
-            ),
-          ),
         ),
       ),
     );
