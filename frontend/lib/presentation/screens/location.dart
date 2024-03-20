@@ -1,21 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors_in_immutables
 // ignore_for_file: use_key_in_widget_constructors
 
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
-class Category {
-  final String region;
-  final dynamic flag;
-
-  Category({
-    required this.region,
-    required this.flag,
-  });
-}
 
 class Attraction {
   final String img;
@@ -43,33 +29,6 @@ class Location extends StatefulWidget {
 }
 
 class _LocationState extends State<Location> {
-  final List<Category> countries = [
-    Category(
-      region: 'all',
-      flag: Icons.apps,
-    ),
-    Category(
-      region: 'Asia',
-      flag: '🇨🇳',
-    ),
-    Category(
-      region: 'Europe',
-      flag: '🇫🇷',
-    ),
-    Category(
-      region: 'Africa',
-      flag: '🇿🇦',
-    ),
-    Category(
-      region: 'Americas',
-      flag: '🇺🇸',
-    ),
-    Category(
-      region: 'Oceania',
-      flag: '🇦🇺',
-    ),
-  ];
-
   final List<Attraction> attractions = [
     Attraction(
         img: 'assets/welcome.jpg',
@@ -125,19 +84,18 @@ class _LocationState extends State<Location> {
           ),
         ),
         leading: Padding(
-            padding: const EdgeInsets.only(top: 17.0),
-            child: IconButton(
-              icon: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: Colors.black,
-                size: 16,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop(); 
-              },
+          padding: const EdgeInsets.only(top: 17.0),
+          child: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: Colors.black,
+              size: 16,
             ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
           ),
-
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(top: 5.0),
@@ -194,7 +152,7 @@ class _LocationState extends State<Location> {
                   height: 8,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
+                  padding: EdgeInsets.only(left: 20.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: SizedBox(
@@ -219,7 +177,7 @@ class _LocationState extends State<Location> {
                             child: Row(
                               children: [
                                 Icon(
-                                  Icons.perm_device_information_outlined,
+                                  Icons.info_outlined,
                                   color: Colors.white,
                                 ),
                                 SizedBox(
@@ -308,7 +266,7 @@ class _LocationState extends State<Location> {
                   ],
                 ),
                 SizedBox(
-                  height: 8,
+                  height: 12,
                 ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -321,7 +279,10 @@ class _LocationState extends State<Location> {
                           padding: const EdgeInsets.symmetric(horizontal: 15.0),
                           child: GestureDetector(
                             onTap: () {
-                              setState(() {});
+                              setState(() {
+                                Navigator.pushNamed(
+                                    context, '/attractionDetail');
+                              });
                             },
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

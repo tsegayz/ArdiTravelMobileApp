@@ -332,7 +332,7 @@ class _HotelState extends State<Hotel> {
                       itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(context, '/hotel');
+                            Navigator.pushNamed(context, '/hotelDetail');
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 9.0),
