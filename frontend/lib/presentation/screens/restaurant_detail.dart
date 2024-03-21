@@ -108,7 +108,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
           ),
         ),
         leading: Padding(
-          padding: const EdgeInsets.only(top: 17.0),
+          padding: EdgeInsets.only(top: 17.0),
           child: IconButton(
             icon: Icon(
               Icons.arrow_back_ios_new_rounded,
@@ -457,7 +457,68 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
             ),
             SizedBox(
               height: 25,
-            )
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 28.0, top: 20, right: 30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 45,
+                    width: 45,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 0,
+                          blurRadius: 1,
+                          offset: Offset(0,0),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.favorite_border,
+                        size: 26,
+                        color: Color.fromARGB(255, 255, 0, 0),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 20),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF2A4244),
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 0,
+                          blurRadius: 1,
+                          offset: Offset(2, 2),
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 90),
+                      child: Text(
+                        'Book now',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontFamily: 'Times New Roman',
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
           ],
         ),
       ),

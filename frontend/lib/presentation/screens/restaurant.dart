@@ -154,8 +154,25 @@ class _RestaurantState extends State<Restaurant> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Text.rich(
+            //   TextSpan(
+            //       text: 'Lets eat',
+            //       style: TextStyle(
+            //         fontSize: 18,
+            //         height: 1,
+            //         fontFamily: 'cambo',
+            //       ),
+            //       children: [
+            //         TextSpan(
+            //           text: 'Quality Food',
+            //           style: TextStyle(
+            //             color: Colors.amber,
+            //           ),
+            //         ),
+            //       ]),
+            // ),
             Padding(
-              padding: const EdgeInsets.only(left: 32, top: 30),
+              padding: const EdgeInsets.only(left: 32, top: 20),
               child: Text(
                 'Lets eat',
                 style: TextStyle(
@@ -276,7 +293,7 @@ class _RestaurantState extends State<Restaurant> {
             ),
             Center(
               child: Container(
-                margin: EdgeInsets.only(top: 20),
+                margin: EdgeInsets.only(top: 20, left: 20),
                 width: 320,
                 height: 50,
                 decoration: BoxDecoration(

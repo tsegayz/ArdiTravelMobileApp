@@ -1,0 +1,12 @@
+[
+	{
+		"_id": 1,
+		"name": "Tsega Yaekob",
+		"email": "admin@natours.io",
+		"active": true,
+		"imageCover": "user-1.jpg",
+		"password": "13579xyz",
+		"passwordConfirm": "13579xyz",
+		"role_id": 1
+	}
+]

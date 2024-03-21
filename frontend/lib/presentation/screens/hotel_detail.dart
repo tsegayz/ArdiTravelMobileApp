@@ -185,21 +185,44 @@ class _HotelDetailState extends State<HotelDetail> {
                           color: Color(0xFF2A4244),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 10),
                           child: Column(
                             children: [
-                              Text('50\$', style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 28, fontFamily: 'cambo'
-                              ),),
-                              Text('/Night', style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16, fontFamily: 'cambo'
-                              ),),
+                              Text(
+                                '50\$',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 28,
+                                    fontFamily: 'cambo'),
+                              ),
+                              Text(
+                                '/Night',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontFamily: 'cambo'),
+                              ),
                             ],
                           ),
                         ),
-                      ))
+                      )),
+                  Positioned(
+                      top: 10,
+                      left: 16,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 17.0),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      )),
                 ],
               ),
             ),
@@ -268,8 +291,14 @@ class _HotelDetailState extends State<HotelDetail> {
                             },
                             child: Column(
                               children: [
-                                Icon(amenities[index].icon, size: 18,),
-                                Text(amenities[index].title, style: TextStyle(fontSize: 12),)
+                                Icon(
+                                  amenities[index].icon,
+                                  size: 18,
+                                ),
+                                Text(
+                                  amenities[index].title,
+                                  style: TextStyle(fontSize: 12),
+                                )
                               ],
                             )),
                       ),
@@ -299,10 +328,10 @@ class _HotelDetailState extends State<HotelDetail> {
                 SizedBox(
                   height: 10,
                 ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 30.0),
+                SizedBox(
+                  width: 330,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
                     child: Row(
                       children: List.generate(
                         attractions.length,
@@ -340,51 +369,68 @@ class _HotelDetailState extends State<HotelDetail> {
             SizedBox(
               height: 20,
             ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(18, 0, 18, 15),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(60),
-            color: Color(0xFF2A4244),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 19.0),
-            child: NavigationBar(
-              height: 30,
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              selectedIndex: selected,
-              destinations: [
-                NavigationDestination(
-                  icon: Icon(
-                    Icons.home_outlined,
-                    color: Colors.white,
+            Padding(
+              padding: const EdgeInsets.only(left: 28.0, top: 20, right: 30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 45,
+                    width: 45,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 0,
+                          blurRadius: 1,
+                          offset: Offset(0, 0),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.favorite_border,
+                        size: 26,
+                        color: Color.fromARGB(255, 255, 0, 0),
+                      ),
+                    ),
                   ),
-                  label: '',
-                ),
-                NavigationDestination(
-                    icon: Icon(Icons.camera_alt, color: Colors.white),
-                    label: ''),
-                NavigationDestination(
-                  icon: Icon(
-                    Icons.luggage_outlined,
-                  ),
-                  label: '',
-                ),
-                NavigationDestination(
-                    icon:
-                        Icon(Icons.person_outline_rounded, color: Colors.white),
-                    label: ''),
-              ],
-              onDestinationSelected: (index) {
-                Navigator.of(context).pushNamed(
-                    ['/home', '/trip', '/hotel', '/restaurant'][index]);
-              },
+                  Container(
+                    margin: EdgeInsets.only(left: 20),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF2A4244),
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 0,
+                          blurRadius: 1,
+                          offset: Offset(2, 2),
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 90),
+                      child: Text(
+                        'Book now',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontFamily: 'Times New Roman',
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
+            SizedBox(
+              height: 20,
+            ),
+          ],
         ),
       ),
     );

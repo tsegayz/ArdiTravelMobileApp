@@ -139,23 +139,25 @@ class _HotelState extends State<Hotel> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 32, top: 30),
+              padding: const EdgeInsets.only(left: 28, top: 30),
               child: Text(
                 'Discover',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                   height: 1,
                   fontFamily: 'cambo',
+                  fontWeight: FontWeight.bold
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 32),
+              padding: const EdgeInsets.only(left: 28),
               child: Text(
                 'hotel of your choice',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                   fontFamily: 'cambo',
+                  fontWeight: FontWeight.bold
                 ),
               ),
             ),
@@ -165,7 +167,7 @@ class _HotelState extends State<Hotel> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(top: 30, right: 10),
+                    margin: EdgeInsets.only(top: 20, right: 10, left: 10),
                     width: 280,
                     height: 50,
                     decoration: BoxDecoration(
@@ -298,7 +300,7 @@ class _HotelState extends State<Hotel> {
               ],
             ),
             SizedBox(
-              height: 27,
+              height: 30,
             ),
             Column(
               children: [
@@ -317,10 +319,9 @@ class _HotelState extends State<Hotel> {
                     ),
                   ],
                 ),
-                SizedBox(height: 15),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+                       EdgeInsets.fromLTRB(30, 4, 30, 20),
                   child: SizedBox(
                     height: 300,
                     child: GridView.builder(
@@ -337,7 +338,7 @@ class _HotelState extends State<Hotel> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 9.0),
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(30),
+                              borderRadius: BorderRadius.circular(24),
                               child: Stack(
                                 children: [
                                   Image.asset(
