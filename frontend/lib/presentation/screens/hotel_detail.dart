@@ -414,12 +414,17 @@ class _HotelDetailState extends State<HotelDetail> {
                     child: Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: 10, horizontal: 90),
-                      child: Text(
-                        'Book now',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          fontFamily: 'Times New Roman',
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/hotelBook');
+                        },
+                        child: Text(
+                          'Book now',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            fontFamily: 'Times New Roman',
+                          ),
                         ),
                       ),
                     ),

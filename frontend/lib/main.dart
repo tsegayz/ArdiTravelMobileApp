@@ -8,12 +8,11 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  
   final AppRouter _appRouter = AppRouter();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title:'Ardi Travel',
+      title: 'Ardi Travel',
       onGenerateRoute: _appRouter.onGenerateRoute,
     );
   }

@@ -1,7 +1,9 @@
+// ignore_for_file: prefer_const_constructors_in_immutables
+
 import 'package:flutter/material.dart';
 
 class RestaurantBook extends StatelessWidget {
-  const RestaurantBook({super.key});
+  RestaurantBook({super.key});
 
   @override
   Widget build(BuildContext context) {
