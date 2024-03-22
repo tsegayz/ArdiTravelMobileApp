@@ -25,14 +25,6 @@ class Attraction {
       required this.descr,
       required this.rating});
 }
-
-class BottomBar {
-  final IconData icon;
-  final String title;
-
-  BottomBar({required this.icon, required this.title});
-}
-
 class Restaurant extends StatefulWidget {
   @override
   State<Restaurant> createState() => _RestaurantState();
@@ -614,7 +606,7 @@ class _RestaurantState extends State<Restaurant> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(18, 0, 18, 15),
+        padding: EdgeInsets.fromLTRB(14, 0, 14, 15),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(60),
@@ -629,22 +621,55 @@ class _RestaurantState extends State<Restaurant> {
               selectedIndex: selected,
               destinations: [
                 NavigationDestination(
-                  icon: Icon(Icons.home_outlined, color: Colors.white),
+                  icon: Image.asset(
+                    'assets/home.png',
+                    width: 20,
+                    height: 20,
+                    color: Colors.white,
+                  ),
                   label: '',
                 ),
                 NavigationDestination(
-                    icon: Icon(Icons.camera_alt, color: Colors.white),
+                    icon: Image.asset(
+                      'assets/luggage.png',
+                      width: 24,
+                      height: 24,
+                      color: Colors.white,
+                    ),
                     label: ''),
                 NavigationDestination(
-                  icon: Icon(Icons.luggage_outlined, color: Colors.white),
+                  icon: Image.asset(
+                    'assets/tourist.png',
+                    width: 26,
+                    height: 26,
+                      color: Colors.white,
+                  ),
                   label: '',
                 ),
                 NavigationDestination(
-                    icon: Icon(Icons.person_outline_rounded), label: ''),
+                    icon: Image.asset(
+                      'assets/restaurant.png',
+                      width: 20,
+                      height: 20,
+                    ),
+                    label: ''),
+                NavigationDestination(
+                    icon: Image.asset(
+                      'assets/user.png',
+                      width: 20,
+                      height: 20,
+                      color: Colors.white,
+                    ),
+                    label: ''),
               ],
               onDestinationSelected: (index) {
-                Navigator.of(context).pushNamed(
-                    ['/home', '/trip', '/hotel', '/restaurant'][index]);
+                Navigator.of(context).pushNamed([
+                  '/home',
+                  '/hotel',
+                  '/trip',
+                  '/restaurant',
+                  '/profile'
+                ][index]);
               },
             ),
           ),

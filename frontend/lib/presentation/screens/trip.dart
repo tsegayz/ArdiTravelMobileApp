@@ -26,13 +26,6 @@ class Attraction {
       required this.rating});
 }
 
-class BottomBar {
-  final IconData icon;
-  final String title;
-
-  BottomBar({required this.icon, required this.title});
-}
-
 class Trip extends StatefulWidget {
   @override
   State<Trip> createState() => _TripState();
@@ -74,7 +67,7 @@ class _TripState extends State<Trip> {
 
   int selectedIndex = 0; // Track the selected index for category/regin
 
-  int selected = 1; // Track the selected index for bottom nav bar
+  int selected = 2; // Track the selected index for bottom nav bar
 
   @override
   Widget build(BuildContext context) {
@@ -866,7 +859,7 @@ class _TripState extends State<Trip> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(18, 0, 18, 15),
+        padding: EdgeInsets.fromLTRB(14, 0, 14, 15),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(60),
@@ -877,26 +870,59 @@ class _TripState extends State<Trip> {
             child: NavigationBar(
               height: 30,
               elevation: 0,
-              selectedIndex: selected,
               backgroundColor: Colors.transparent,
+              selectedIndex: selected,
               destinations: [
                 NavigationDestination(
-                  icon: Icon(Icons.home_outlined, color: Colors.white),
+                  icon: Image.asset(
+                    'assets/home.png',
+                    width: 20,
+                    height: 20,
+                    color: Colors.white,
+                  ),
                   label: '',
                 ),
-                NavigationDestination(icon: Icon(Icons.camera_alt), label: ''),
                 NavigationDestination(
-                  icon: Icon(Icons.luggage_outlined, color: Colors.white),
+                    icon: Image.asset(
+                      'assets/luggage.png',
+                      width: 24,
+                      height: 24,
+                      color: Colors.white,
+                    ),
+                    label: ''),
+                NavigationDestination(
+                  icon: Image.asset(
+                    'assets/tourist.png',
+                    width: 26,
+                    height: 26,
+                  ),
                   label: '',
                 ),
                 NavigationDestination(
-                    icon:
-                        Icon(Icons.person_outline_rounded, color: Colors.white),
+                    icon: Image.asset(
+                      'assets/restaurant.png',
+                      width: 20,
+                      height: 20,
+                      color: Colors.white,
+                    ),
+                    label: ''),
+                NavigationDestination(
+                    icon: Image.asset(
+                      'assets/user.png',
+                      width: 20,
+                      height: 20,
+                      color: Colors.white,
+                    ),
                     label: ''),
               ],
               onDestinationSelected: (index) {
-                Navigator.of(context)
-                    .pushNamed(['/home', '/trip', '/hotel', '/restaurant'][index]);
+                Navigator.of(context).pushNamed([
+                  '/home',
+                  '/hotel',
+                  '/trip',
+                  '/restaurant',
+                  '/profile'
+                ][index]);
               },
             ),
           ),

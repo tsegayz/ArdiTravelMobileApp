@@ -26,13 +26,6 @@ class Attraction {
       required this.rating});
 }
 
-class BottomBar {
-  final IconData icon;
-  final String title;
-
-  BottomBar({required this.icon, required this.title});
-}
-
 class _FlagClipper extends CustomClipper<Path> {
   const _FlagClipper(this.radius);
 
@@ -140,19 +133,18 @@ class _HomeState extends State<Home> {
           ),
         ),
         leading: Padding(
-            padding: const EdgeInsets.only(top: 17.0),
-            child: IconButton(
-              icon: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: Colors.black,
-                size: 16,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop(); 
-              },
+          padding: const EdgeInsets.only(top: 17.0),
+          child: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: Colors.black,
+              size: 16,
             ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
           ),
-
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(top: 5.0),
@@ -338,12 +330,12 @@ class _HomeState extends State<Home> {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Padding(
-                    padding:  EdgeInsets.only(left: 30.0),
+                    padding: EdgeInsets.only(left: 30.0),
                     child: Row(
                       children: List.generate(
                         attractions.length,
                         (index) => Padding(
-                          padding:  EdgeInsets.symmetric(horizontal: 15.0),
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
                           child: GestureDetector(
                             onTap: () {
                               Navigator.pushNamed(context, '/location');
@@ -356,8 +348,7 @@ class _HomeState extends State<Home> {
                                 child: Stack(
                                   children: [
                                     Image.asset(
-                                      attractions[index]
-                                          .img, 
+                                      attractions[index].img,
                                       fit: BoxFit.cover,
                                       width: double.infinity,
                                       height: double.infinity,
@@ -375,9 +366,8 @@ class _HomeState extends State<Home> {
                                               255, 255, 255, 255),
                                         ),
                                         child: Padding(
-                                          padding:
-                                              const EdgeInsets.fromLTRB(
-                                                  8, 1, 8, 7),
+                                          padding: const EdgeInsets.fromLTRB(
+                                              8, 1, 8, 7),
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
@@ -388,16 +378,14 @@ class _HomeState extends State<Home> {
                                                     fontSize: 12,
                                                     fontFamily:
                                                         'Times New Roman',
-                                                    fontWeight:
-                                                        FontWeight.bold,
+                                                    fontWeight: FontWeight.bold,
                                                     color: Colors.black),
                                               ),
                                               Text(
                                                 attractions[index].descr,
                                                 style: TextStyle(
                                                   fontSize: 11,
-                                                  fontFamily:
-                                                      'Times New Roman',
+                                                  fontFamily: 'Times New Roman',
                                                   color: Color.fromARGB(
                                                       255, 122, 122, 122),
                                                 ),
@@ -419,9 +407,7 @@ class _HomeState extends State<Home> {
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.only(
-                                                left: 3,
-                                                right: 4,
-                                                bottom: 4),
+                                                left: 3, right: 4, bottom: 4),
                                             child: Row(
                                               children: [
                                                 Icon(
@@ -562,7 +548,7 @@ class _HomeState extends State<Home> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(18, 0, 18, 15),
+        padding: EdgeInsets.fromLTRB(14, 0, 14, 15),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(60),
@@ -577,26 +563,50 @@ class _HomeState extends State<Home> {
               selectedIndex: selected,
               destinations: [
                 NavigationDestination(
-                  icon: Icon(
-                    Icons.home_outlined,
+                  icon: Image.asset(
+                    'assets/home.png',
+                    width: 20,
+                    height: 20,
                   ),
                   label: '',
                 ),
                 NavigationDestination(
-                    icon: Icon(Icons.camera_alt, color: Colors.white),
+                    icon: Image.asset(
+                      'assets/luggage.png',
+                      width: 24,
+                      height: 24,
+                      color: Colors.white,
+                    ),
                     label: ''),
                 NavigationDestination(
-                  icon: Icon(Icons.luggage_outlined, color: Colors.white),
+                  icon: Image.asset(
+                    'assets/tourist.png',
+                    width: 26,
+                    height: 26,
+                    color: Colors.white,
+                  ),
                   label: '',
                 ),
                 NavigationDestination(
-                    icon:
-                        Icon(Icons.person_outline_rounded, color: Colors.white),
+                    icon: Image.asset(
+                      'assets/restaurant.png',
+                      width: 20,
+                      height: 20,
+                      color: Colors.white,
+                    ),
+                    label: ''),
+                NavigationDestination(
+                    icon: Image.asset(
+                      'assets/user.png',
+                      width: 20,
+                      height: 20,
+                      color: Colors.white,
+                    ),
                     label: ''),
               ],
               onDestinationSelected: (index) {
-                Navigator.of(context)
-                    .pushNamed(['/home', '/trip', '/hotel', '/restaurant'][index]);
+                Navigator.of(context).pushNamed(
+                    ['/home','/hotel', '/trip',  '/restaurant', '/profile'][index]);
               },
             ),
           ),
