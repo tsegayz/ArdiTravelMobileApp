@@ -89,7 +89,6 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
 
   int selectedIndex = 0; // Track the selected index for category/regin
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -209,8 +208,9 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                         Expanded(
                           child: Padding(
                             padding:
-                                const EdgeInsets.only(bottom: 15.0, left: 3),
+                                EdgeInsets.only(bottom: 8.0, left: 3),
                             child: TextField(
+                              style: TextStyle(fontSize: 14),
                               decoration: InputDecoration(
                                 hintText: 'search restaurant.....',
                                 border: InputBorder.none,
@@ -398,7 +398,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                             Container(
                               width: 145,
                               padding: EdgeInsets.symmetric(
-                                horizontal: 15, 
+                                horizontal: 15,
                               ),
                               decoration: BoxDecoration(
                                 color: Color.fromARGB(255, 255, 255, 255),
@@ -474,7 +474,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 0,
                           blurRadius: 1,
-                          offset: Offset(0,0),
+                          offset: Offset(0, 0),
                         ),
                       ],
                     ),
@@ -502,13 +502,18 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                     ),
                     child: Padding(
                       padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 90),
-                      child: Text(
-                        'Book now',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          fontFamily: 'Times New Roman',
+                          EdgeInsets.symmetric(horizontal: 90),
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/restaurantBook');
+                        },
+                        child: Text(
+                          'Book now',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            fontFamily: 'Times New Roman',
+                          ),
                         ),
                       ),
                     ),

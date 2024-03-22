@@ -320,8 +320,9 @@ class _RestaurantState extends State<Restaurant> {
                       ),
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.only(bottom: 14.0, left: 3),
+                          padding: const EdgeInsets.only(bottom: 4.0, left: 5),
                           child: TextField(
+                            style: TextStyle(fontSize: 14),
                             decoration: InputDecoration(
                               hintText: 'search restaurant.....',
                               border: InputBorder.none,
@@ -340,7 +341,7 @@ class _RestaurantState extends State<Restaurant> {
               ),
             ),
             SizedBox(
-              height: 38,
+              height: 40,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 28.0),
@@ -355,7 +356,7 @@ class _RestaurantState extends State<Restaurant> {
               ),
             ),
             SizedBox(
-              height: 10,
+              height: 20,
             ),
             SizedBox(
               height: 45,
@@ -423,7 +424,7 @@ class _RestaurantState extends State<Restaurant> {
               ),
             ),
             SizedBox(
-              height: 25,
+              height: 35,
             ),
             Column(
               children: [
@@ -444,7 +445,7 @@ class _RestaurantState extends State<Restaurant> {
                   ],
                 ),
                 SizedBox(
-                  height: 15,
+                  height: 25,
                 ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,

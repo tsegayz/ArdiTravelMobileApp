@@ -13,7 +13,9 @@ class _HotelBookState extends State<HotelBook> {
   String dropdownValue = 'one';
   DateTime selectedDate = DateTime.now();
 
-  TextEditingController _controller = TextEditingController();
+
+  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _controllerTwo = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -82,12 +84,12 @@ class _HotelBookState extends State<HotelBook> {
                 style: TextStyle(
                   fontFamily: 'lobster',
                   fontSize: 30,
-                  color: Color.fromARGB(255, 56, 56, 56),
+                  color: Color.fromARGB(255, 173, 173, 173),
                 ),
               ),
             ),
             SizedBox(
-              height: 20,
+              height: 25,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -96,7 +98,7 @@ class _HotelBookState extends State<HotelBook> {
                   'Full Name :',
                   style: TextStyle(
                     fontFamily: 'Times New Roman',
-                    fontSize: 17,
+                    fontSize: 15,
                     color: Color.fromARGB(255, 56, 56, 56),
                   ),
                 ),
@@ -106,22 +108,24 @@ class _HotelBookState extends State<HotelBook> {
                   height: 36,
                   child: TextFormField(
                     onChanged: (value) {},
+                    style: TextStyle(fontSize: 14),
                     decoration: InputDecoration(
                       labelText: 'name',
                       labelStyle: TextStyle(
-                        color: Color.fromARGB(255, 48, 48, 48),
+                        color: Color.fromARGB(255, 197, 197, 197),
+                        fontSize: 14,
                         fontFamily: 'Times New Roman',
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(4),
                         borderSide: BorderSide(
-                          color: Color.fromARGB(255, 206, 206, 206),
+                          color: Color.fromARGB(255, 224, 224, 224),
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(4),
                         borderSide: BorderSide(
-                          color: Color.fromARGB(255, 206, 206, 206),
+                          color: Color.fromARGB(255, 224, 224, 224),
                         ),
                       ),
                       filled: true,
@@ -135,7 +139,7 @@ class _HotelBookState extends State<HotelBook> {
               ],
             ),
             SizedBox(
-              height: 20,
+              height: 30,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -144,7 +148,7 @@ class _HotelBookState extends State<HotelBook> {
                   'Phone number :',
                   style: TextStyle(
                     fontFamily: 'Times New Roman',
-                    fontSize: 17,
+                    fontSize: 15,
                     color: Color.fromARGB(255, 56, 56, 56),
                   ),
                 ),
@@ -154,25 +158,26 @@ class _HotelBookState extends State<HotelBook> {
                   height: 36,
                   child: TextFormField(
                     onChanged: (value) {},
+                    style: TextStyle(fontSize: 14),
                     decoration: InputDecoration(
                       labelText: '+251-987-879-977',
                       labelStyle: TextStyle(
                         fontSize: 14,
-                        color: Color.fromARGB(255, 48, 48, 48),
+                        color: Color.fromARGB(255, 197, 197, 197),
                         fontFamily: 'Times New Roman',
                       ),
                       prefixIcon: Icon(Icons.phone,
-                          color: Color.fromARGB(255, 90, 90, 90), size: 18),
+                          color: Color.fromARGB(255, 177, 177, 177), size: 18),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(4),
                         borderSide: BorderSide(
-                          color: Color.fromARGB(255, 206, 206, 206),
+                          color: Color.fromARGB(255, 224, 224, 224),
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(4),
                         borderSide: BorderSide(
-                          color: Color.fromARGB(255, 206, 206, 206),
+                          color: Color.fromARGB(255, 224, 224, 224),
                         ),
                       ),
                       filled: true,
@@ -186,7 +191,7 @@ class _HotelBookState extends State<HotelBook> {
               ],
             ),
             SizedBox(
-              height: 20,
+              height: 30,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -195,7 +200,7 @@ class _HotelBookState extends State<HotelBook> {
                   'Room type :',
                   style: TextStyle(
                     fontFamily: 'Times New Roman',
-                    fontSize: 17,
+                    fontSize: 15,
                     color: Color.fromARGB(255, 56, 56, 56),
                   ),
                 ),
@@ -204,7 +209,7 @@ class _HotelBookState extends State<HotelBook> {
                   width: 170,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Color.fromARGB(255, 206, 206, 206),
+                      color: Color.fromARGB(255, 224, 224, 224),
                     ),
                     borderRadius: BorderRadius.circular(5.0),
                   ),
@@ -215,7 +220,7 @@ class _HotelBookState extends State<HotelBook> {
                       hintStyle: TextStyle(
                         fontFamily: 'Times New Roman',
                         fontSize: 14,
-                        color: Color.fromARGB(255, 56, 56, 56),
+                        color: Color.fromARGB(255, 197, 197, 197),
                       ),
                       focusColor: Colors.transparent,
                       border: InputBorder.none,
@@ -234,15 +239,15 @@ class _HotelBookState extends State<HotelBook> {
                       });
                     },
                     items: [
-                      DropdownMenuItem(value: 'one', child: Text('deluxe')),
-                      DropdownMenuItem(value: 'two', child: Text('premium'))
+                      DropdownMenuItem(value: 'one', child: Text('deluxe', style: TextStyle(fontSize: 15),)),
+                      DropdownMenuItem(value: 'two', child: Text('premium', style: TextStyle(fontSize: 15),)),
                     ],
                   ),
                 ),
               ],
             ),
             SizedBox(
-              height: 20,
+              height: 30,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -251,68 +256,67 @@ class _HotelBookState extends State<HotelBook> {
                   'Check in date :',
                   style: TextStyle(
                     fontFamily: 'Times New Roman',
-                    fontSize: 17,
+                    fontSize: 15,
                     color: Color.fromARGB(255, 56, 56, 56),
                   ),
                 ),
                 SizedBox(width: 10),
-                GestureDetector(
-                  onTap: () async {
-                    final DateTime? dateTime = await showDatePicker(
-                      context: context,
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2500),
-                      initialDate: selectedDate,
-                    );
-                    if (dateTime != null) {
-                      setState(() {
-                        selectedDate = dateTime;
-                        _controller.text =
-                            '${selectedDate!.month}/${selectedDate!.day}/${selectedDate!.year}';
-                      });
-                    }
-                  },
-                  child: SizedBox(
-                    width: 170,
-                    height: 36,
-                    child: TextFormField(
-                      controller: _controller,
-                      readOnly: true, // Make the TextFormField read-only
-                      decoration: InputDecoration(
-                        labelText: 'mm/dd/yy',
-                        labelStyle: TextStyle(
-                          color: Color.fromARGB(255, 48, 48, 48),
-                          fontFamily: 'Times New Roman',
-                          fontSize: 14,
-                        ),
-                        prefixIcon: Icon(
-                          Icons.calendar_month_rounded,
-                          color: Color.fromARGB(255, 90, 90, 90),
-                          size: 18,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(
-                            color: Color.fromARGB(255, 206, 206, 206),
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(
-                            color: Color.fromARGB(255, 206, 206, 206),
-                          ),
-                        ),
-                        filled: true,
-                        fillColor: Color.fromARGB(62, 255, 255, 255),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 17),
+                SizedBox(
+                  width: 170,
+                  height: 36,
+                  child: TextFormField(
+                    controller: _controller,
+                    readOnly: true, 
+                    style: TextStyle(fontSize: 14),
+                    onTap: () async {
+                      final DateTime? dateTime = await showDatePicker(
+                        context: context,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2500),
+                        initialDate: selectedDate,
+                      );
+                      if (dateTime != null) {
+                        setState(() {
+                          selectedDate = dateTime;
+                          _controller.text =
+                              '${selectedDate.month}/${selectedDate.day}/${selectedDate.year}';
+                        });
+                      }
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'mm/dd/yy',
+                      labelStyle: TextStyle(
+                        color: Color.fromARGB(255, 197, 197, 197),
+                        fontFamily: 'Times New Roman',
+                        fontSize: 14,
                       ),
+                      prefixIcon: Icon(
+                        Icons.calendar_month_rounded,
+                        color: Color.fromARGB(255, 90, 90, 90),
+                        size: 18,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                        borderSide: BorderSide(
+                          color: Color.fromARGB(255, 224, 224, 224),
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                        borderSide: BorderSide(
+                          color: Color.fromARGB(255, 224, 224, 224),
+                        ),
+                      ),
+                      filled: true,
+                      fillColor: Color.fromARGB(62, 255, 255, 255),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 17),
                     ),
                   ),
                 ),
               ],
             ),
             SizedBox(
-              height: 20,
+              height: 30,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -321,68 +325,67 @@ class _HotelBookState extends State<HotelBook> {
                   'Check out date :',
                   style: TextStyle(
                     fontFamily: 'Times New Roman',
-                    fontSize: 17,
+                    fontSize: 15,
                     color: Color.fromARGB(255, 56, 56, 56),
                   ),
                 ),
                 SizedBox(width: 10),
-                GestureDetector(
-                  onTap: () async {
-                    final DateTime? dateTime = await showDatePicker(
-                      context: context,
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2500),
-                      initialDate: selectedDate,
-                    );
-                    if (dateTime != null) {
-                      setState(() {
-                        selectedDate = dateTime;
-                        _controller.text =
-                            '${selectedDate!.month}/${selectedDate!.day}/${selectedDate!.year}';
-                      });
-                    }
-                  },
-                  child: SizedBox(
-                    width: 170,
-                    height: 36,
-                    child: TextFormField(
-                      controller: _controller,
-                      readOnly: true, // Make the TextFormField read-only
-                      decoration: InputDecoration(
-                        labelText: 'mm/dd/yy',
-                        labelStyle: TextStyle(
-                          color: Color.fromARGB(255, 48, 48, 48),
-                          fontFamily: 'Times New Roman',
-                          fontSize: 14,
-                        ),
-                        prefixIcon: Icon(
-                          Icons.calendar_month_rounded,
-                          color: Color.fromARGB(255, 90, 90, 90),
-                          size: 18,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(
-                            color: Color.fromARGB(255, 206, 206, 206),
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(
-                            color: Color.fromARGB(255, 206, 206, 206),
-                          ),
-                        ),
-                        filled: true,
-                        fillColor: Color.fromARGB(62, 255, 255, 255),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 17),
+                SizedBox(
+                  width: 170,
+                  height: 36,
+                  child: TextFormField(
+                    controller: _controllerTwo,
+                    readOnly: true, 
+                    style: TextStyle(fontSize: 14),
+                    onTap: () async {
+                      final DateTime? dateTime = await showDatePicker(
+                        context: context,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2500),
+                        initialDate: selectedDate,
+                      );
+                      if (dateTime != null) {
+                        setState(() {
+                          selectedDate = dateTime;
+                          _controllerTwo.text =
+                              '${selectedDate.month}/${selectedDate.day}/${selectedDate.year}';
+                        });
+                      }
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'mm/dd/yy',
+                      labelStyle: TextStyle(
+                        color: Color.fromARGB(255, 197, 197, 197),
+                        fontSize: 14,
+                        fontFamily: 'Times New Roman',
                       ),
+                      prefixIcon: Icon(
+                        Icons.calendar_month_rounded,
+                        color: Color.fromARGB(255, 90, 90, 90),
+                        size: 18,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                        borderSide: BorderSide(
+                          color: Color.fromARGB(255, 224, 224, 224),
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                        borderSide: BorderSide(
+                          color: Color.fromARGB(255, 224, 224, 224),
+                        ),
+                      ),
+                      filled: true,
+                      fillColor: Color.fromARGB(62, 255, 255, 255),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 17),
                     ),
                   ),
                 ),
               ],
             ),
             SizedBox(
-              height: 50,
+              height: 70,
             ),
             Container(
               decoration: BoxDecoration(
@@ -400,13 +403,13 @@ class _HotelBookState extends State<HotelBook> {
               child: GestureDetector(
                 onTap: () {},
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 50),
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
                   child: Text(
                     'Book now',
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: 'Times New Roman',
-                      fontSize: 18,
+                      fontSize: 17,
                     ),
                   ),
                 ),
