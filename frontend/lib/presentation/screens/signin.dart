@@ -1,11 +1,15 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, prefer_const_literals_to_create_immutables, must_be_immutable, use_key_in_widget_constructors
 
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class SignIn extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
+  var email;
+  var password;
 
-  SignIn({super.key});
+  final _formKey = GlobalKey<FormState>();
 
   String? validateEmail(String? email) {
     RegExp emailRegex = RegExp(
@@ -36,7 +40,6 @@ class SignIn extends StatelessWidget {
             height: double.infinity,
             color: Color.fromARGB(83, 0, 0, 0),
           ),
-          
           SingleChildScrollView(
             child: Column(
               children: [
@@ -49,15 +52,22 @@ class SignIn extends StatelessWidget {
                         SizedBox(height: 320),
                         TextFormField(
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            email = value;
+                          },
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Times New Roman',
+                            fontSize: 16,
+                          ),
                           decoration: InputDecoration(
-                            labelText: 'username',
+                            labelText: 'email',
                             labelStyle: TextStyle(
                               color: Color.fromARGB(255, 255, 255, 255),
                               fontFamily: 'Times New Roman',
                             ),
                             prefixIcon: Icon(
-                              Icons.person,
+                              Icons.alternate_email_rounded,
                               color: Colors.white,
                               size: 16,
                             ),
@@ -88,7 +98,14 @@ class SignIn extends StatelessWidget {
                               ? 'password should be 8 characters'
                               : null,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            password = value;
+                          },
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Times New Roman',
+                            fontSize: 16,
+                          ),
                           obscureText: true,
                           decoration: InputDecoration(
                             labelText: 'Password',
@@ -123,6 +140,7 @@ class SignIn extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
+                              signin(email, password);
                               Navigator.pushNamed(context, '/home');
                             }
                           },
@@ -194,7 +212,9 @@ class SignIn extends StatelessWidget {
             top: 60,
             right: 40,
             child: TextButton(
-              onPressed: () {Navigator.pushNamed(context, '/home');},
+              onPressed: () {
+                Navigator.pushNamed(context, '/home');
+              },
               child: Text(
                 'Skip',
                 style: TextStyle(
@@ -209,4 +229,14 @@ class SignIn extends StatelessWidget {
       ),
     );
   }
+}
+
+signin(email, password) async {
+  final response = await http.post(
+    Uri.parse('http://localhost:5000/api/v1/users/login'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{'email': email, 'password': password}),
+  );
 }
