@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors_in_immutables
 // ignore_for_file: use_key_in_widget_constructors
 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class Category {
@@ -430,7 +432,7 @@ class _HotelState extends State<Hotel> {
                     'assets/home.png',
                     width: 20,
                     height: 20,
-                      color: Colors.white,
+                    color: Colors.white,
                   ),
                   label: '',
                 ),
@@ -481,5 +483,22 @@ class _HotelState extends State<Hotel> {
         ),
       ),
     );
+  }
+}
+
+Future<List<dynamic>> getLocation() async {
+  try {
+    final response =
+        await http.get(Uri.parse('http://localhost:5000/api/v1/hotels'));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      List<dynamic> hotels = data['data']['hotels'];
+      return hotels;
+    } else {
+      return []; // Return an empty list if response status code is not 200
+    }
+  } catch (e) {
+    return []; // Return an empty list if an error occurs
   }
 }
