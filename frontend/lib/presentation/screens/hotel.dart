@@ -71,6 +71,21 @@ class _HotelState extends State<Hotel> {
 
   int selected = 1; // Track the selected index for bottom nav bar
 
+  List<dynamic> hotels = [];
+
+  Future<void> fetchHotels() async {
+    List<dynamic> fetchedHotels = await getHotels();
+    setState(() {
+      hotels = fetchedHotels;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchHotels();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -274,8 +289,8 @@ class _HotelState extends State<Hotel> {
                                 height: 80,
                                 child: Stack(
                                   children: [
-                                    Image.asset(
-                                      attractions[index].img,
+                                    Image.network(
+                                      'http://localhost:5000${hotels[index]['image']}',
                                       fit: BoxFit.cover,
                                       width: double.infinity,
                                       height: double.infinity,
@@ -321,7 +336,7 @@ class _HotelState extends State<Hotel> {
                         crossAxisCount: 2,
                         crossAxisSpacing: 20.0,
                       ),
-                      itemCount: attractions.length,
+                      itemCount: hotels.length,
                       itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
                           onTap: () {
@@ -331,74 +346,91 @@ class _HotelState extends State<Hotel> {
                             padding: const EdgeInsets.symmetric(vertical: 9.0),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(24),
-                              child: Stack(
-                                children: [
-                                  Image.asset(
-                                    attractions[index].img,
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                  ),
-                                  Container(
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    color: Color.fromARGB(131, 0, 0, 0),
-                                  ),
-                                  Positioned(
-                                    bottom: 13,
-                                    left: 4,
-                                    child: Container(
-                                      width: 190,
-                                      padding: EdgeInsets.all(2),
-                                      child: Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(8, 1, 8, 7),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                              child: SizedBox(
+                                width: 207,
+                                height: 275,
+                                child: Stack(
+                                  children: [
+                                    Image.network(
+                                      'http://localhost:5000${hotels[index]['image']}',
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                    ),
+                                    Container(
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      color: Color.fromARGB(131, 0, 0, 0),
+                                    ),
+                                    Positioned(
+                                      bottom: 13,
+                                      left: 4,
+                                      child: Container(
+                                        width: 190,
+                                        padding: EdgeInsets.all(2),
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(8, 1, 8, 7),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                width: 130,
+                                                child: Text(
+                                                  hotels[index]['name'],
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontFamily:
+                                                          'Times New Roman',
+                                                      color: Colors.white),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 90,
+                                                child: Text(
+                                                  hotels[index]['description'],
+                                                  style: TextStyle(
+                                                      fontSize: 9,
+                                                      color: Colors.white),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: 18,
+                                      top: 20,
+                                      child: Container(
+                                        width: 26,
+                                        height: 26,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                        ),
+                                        child: Stack(
                                           children: [
-                                            Text(
-                                              attractions[index].title,
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontFamily: 'Times New Roman',
-                                                  color: Colors.white),
-                                            ),
-                                            Text(
-                                              'Lorem ipsum dolor sit amet, consectetur',
-                                              style: TextStyle(
-                                                  fontSize: 9,
-                                                  color: Colors.white),
+                                            Center(
+                                              child: Icon(
+                                                size: 18,
+                                                Icons.favorite_border,
+                                                color: Colors.red,
+                                              ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    right: 18,
-                                    top: 20,
-                                    child: Container(
-                                      width: 26,
-                                      height: 26,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(50),
-                                      ),
-                                      child: Stack(
-                                        children: [
-                                          Center(
-                                            child: Icon(
-                                              size: 18,
-                                              Icons.favorite_border,
-                                              color: Colors.red,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -486,7 +518,7 @@ class _HotelState extends State<Hotel> {
   }
 }
 
-Future<List<dynamic>> getLocation() async {
+Future<List<dynamic>> getHotels() async {
   try {
     final response =
         await http.get(Uri.parse('http://localhost:5000/api/v1/hotels'));
