@@ -2,6 +2,7 @@
 // ignore_for_file: use_key_in_widget_constructors
 
 import 'dart:convert';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
@@ -188,91 +189,437 @@ class _HomeState extends State<Home> {
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: Column(
+        child: Stack(
           children: [
-            Center(
-              child: Container(
-                margin: EdgeInsets.only(top: 40),
-                width: 320,
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  boxShadow: [
-                    BoxShadow(
-                      color:
-                          Color.fromARGB(255, 134, 134, 134).withOpacity(0.5),
-                      spreadRadius: 0.8,
-                      blurRadius: 0.5,
+            Column(
+              children: [
+                Center(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 25),
+                    width: 320,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color.fromARGB(255, 134, 134, 134)
+                              .withOpacity(0.5),
+                          spreadRadius: 0.8,
+                          blurRadius: 0.5,
+                        ),
+                      ],
+                      color: Color.fromARGB(255, 255, 255, 255),
                     ),
-                  ],
-                  color: Color.fromARGB(255, 255, 255, 255),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 4.0),
-                          child: TextField(
-                            onChanged: (value) => _runFilter(value),
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontFamily: 'Times New Roman',
-                              color: Colors.black,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 4.0),
+                              child: TextField(
+                                onChanged: (value) => _runFilter(value),
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontFamily: 'Times New Roman',
+                                  color: Colors.black,
+                                ),
+                                decoration: InputDecoration(
+                                  hintText: 'Discover a location.....',
+                                  border: InputBorder.none,
+                                  hintStyle: TextStyle(
+                                    color: const Color.fromARGB(
+                                        255, 192, 192, 192),
+                                    fontSize: 15,
+                                    fontFamily: 'cambo',
+                                  ),
+                                ),
+                              ),
                             ),
-                            decoration: InputDecoration(
-                              hintText: 'Discover a location.....',
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(
-                                color:
-                                    const Color.fromARGB(255, 192, 192, 192),
-                                fontSize: 15,
-                                fontFamily: 'cambo',
+                          ),
+                          Icon(
+                            Icons.search_rounded,
+                            color: Colors.grey,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                SizedBox(
+                  height: 45,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 32, left: 32),
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: List.generate(
+                        countries.length,
+                        (index) => GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedIndex = index;
+                              getLocation();
+                            });
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 7),
+                            child: Container(
+                              padding: EdgeInsets.only(
+                                right: 10.0,
+                              ),
+                              decoration: BoxDecoration(
+                                color: selectedIndex == index
+                                    ? Color(0xFF2A4244)
+                                    : Colors.white,
+                                borderRadius: BorderRadius.circular(50),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 0,
+                                    blurRadius: 2,
+                                    offset: Offset(1, 1),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  countries[index].flag is IconData
+                                      ? Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 8.0, left: 6),
+                                          child: Container(
+                                            width: 21,
+                                            height: 21,
+                                            decoration: BoxDecoration(
+                                              color: Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                            ),
+                                            child: Icon(countries[index].flag,
+                                                size: 15),
+                                          ),
+                                        )
+                                      : ClipPath(
+                                          clipper: _FlagClipper(8),
+                                          child: Text(
+                                            countries[index].flag,
+                                            style: TextStyle(
+                                              fontSize: 24,
+                                            ),
+                                          ),
+                                        ),
+                                  Text(
+                                    countries[index].region,
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.grey),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ),
                       ),
-                      Icon(
-                        Icons.search_rounded,
-                        color: Colors.grey,
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+                SizedBox(
+                  height: 5,
+                ),
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 28.0),
+                          child: Text(
+                            'Trending Activities :',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: 'Times New Roman',
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 30.0),
+                        child: Row(
+                          children: List.generate(
+                            activities.length,
+                            (index) => Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 15.0),
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: SizedBox(
+                                    width: 207,
+                                    height: 275,
+                                    child: Stack(
+                                      children: [
+                                        Image.network(
+                                          'http://localhost:5000${activities[index]['image']}',
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                        ),
+                                        Positioned(
+                                          bottom: 13,
+                                          left: 10,
+                                          child: Container(
+                                            width: 185,
+                                            height: 60,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 4),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  activities[index]['name'],
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                    fontFamily:
+                                                        'Times New Roman',
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 3.0),
+                                                  child: Text(
+                                                    activities[index]
+                                                        ['description'],
+                                                    style: TextStyle(
+                                                      fontSize: 7.5,
+                                                      fontFamily:
+                                                          'Times New Roman',
+                                                      color: Color.fromARGB(
+                                                          255, 122, 122, 122),
+                                                    ),
+                                                    maxLines: 3,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 70,
+                                          right: 23,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(3),
+                                              color: const Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 3, right: 4),
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.star,
+                                                    color: Colors.amber,
+                                                    size: 10,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 2,
+                                                  ),
+                                                  Text(
+                                                    activities[index]['rating']
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 8,
+                                                        color: Colors.black),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 27,
+                ),
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 28.0),
+                          child: Text(
+                            'Top Attractions :',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: 'Times New Roman',
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 30.0, bottom: 15),
+                        child: Row(
+                          children: List.generate(
+                            locations.length,
+                            (index) => Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {});
+                                },
+                                child: Container(
+                                    width: 200,
+                                    height: 90,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 0,
+                                          blurRadius: 2,
+                                          offset: Offset(1, 1),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 90,
+                                          child: Padding(
+                                            padding: EdgeInsets.all(9),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(11),
+                                              child: Image.network(
+                                                'http://localhost:5000${locations[index]['image']}',
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(top: 15),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                width: 100,
+                                                child: Text(
+                                                  locations[index]['name'],
+                                                  style: TextStyle(
+                                                      fontSize: 10,
+                                                      fontFamily:
+                                                          'Times New Roman',
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.black),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 100,
+                                                child: Text(
+                                                  locations[index]
+                                                      ['description'],
+                                                  style: TextStyle(
+                                                    fontSize: 9,
+                                                    fontFamily:
+                                                        'Times New Roman',
+                                                    color: Color.fromARGB(
+                                                        255, 122, 122, 122),
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
             Visibility(
               visible: enteredWord.isEmpty ? false : true,
-              child: Container(
-                margin: EdgeInsets.only(top: 8),
-                width: 320,
-                height: 70,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromARGB(255, 134, 134, 134)
-                          .withOpacity(0.5),
-                      blurRadius: 1,
-                      offset: Offset(0, 1),
-                    ),
-                  ],
-                  color: Color.fromARGB(255, 255, 255, 255),
-                ),
-                child: ListView(
-                  scrollDirection: Axis.vertical,
-                  children: List.generate(
-                    _filteredLocation.length,
-                    (index) => Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15.0),
-                      child: GestureDetector(
+              child: Center(
+                child: Container(
+                  margin: EdgeInsets.only(top: 78),
+                  width: 320,
+                  height: 70,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    boxShadow: [
+                      BoxShadow(
+                        color:
+                            Color.fromARGB(255, 134, 134, 134).withOpacity(0.5),
+                        blurRadius: 1,
+                        offset: Offset(0, 1),
+                      ),
+                    ],
+                    color: Color.fromARGB(255, 255, 255, 255),
+                  ),
+                  child: ListView(
+                    scrollDirection: Axis.vertical,
+                    children: List.generate(
+                      _filteredLocation.length,
+                      (index) => GestureDetector(
                         onTap: () {},
                         child: Padding(
-                          padding:
-                              const EdgeInsets.symmetric(vertical: 3.0),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 3.0, horizontal: 15.0),
                           child: Text(
                             _filteredLocation[index]['name'],
                             style: TextStyle(
@@ -287,339 +634,6 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 38,
-            ),
-            SizedBox(
-              height: 45,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 32, left: 32),
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: List.generate(
-                    countries.length,
-                    (index) => GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedIndex = index;
-                          getLocation();
-                        });
-                      },
-                      child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 8.0, vertical: 7),
-                        child: Container(
-                          padding: EdgeInsets.only(
-                            right: 10.0,
-                          ),
-                          decoration: BoxDecoration(
-                            color: selectedIndex == index
-                                ? Color(0xFF2A4244)
-                                : Colors.white,
-                            borderRadius: BorderRadius.circular(50),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 0,
-                                blurRadius: 2,
-                                offset: Offset(1, 1),
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              countries[index].flag is IconData
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(
-                                          right: 8.0, left: 6),
-                                      child: Container(
-                                        width: 21,
-                                        height: 21,
-                                        decoration: BoxDecoration(
-                                          color: Color.fromARGB(
-                                              255, 255, 255, 255),
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                        ),
-                                        child: Icon(countries[index].flag,
-                                            size: 15),
-                                      ),
-                                    )
-                                  : ClipPath(
-                                      clipper: _FlagClipper(8),
-                                      child: Text(
-                                        countries[index].flag,
-                                        style: TextStyle(
-                                          fontSize: 24,
-                                        ),
-                                      ),
-                                    ),
-                              Text(
-                                countries[index].region,
-                                style:
-                                    TextStyle(fontSize: 12, color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Column(
-              children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 28.0),
-                      child: Text(
-                        'Trending Attractions :',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'Times New Roman',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 30.0),
-                    child: Row(
-                      children: List.generate(
-                        activities.length,
-                        (index) => Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15.0),
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: SizedBox(
-                                width: 207,
-                                height: 275,
-                                child: Stack(
-                                  children: [
-                                    Image.network(
-                                      'http://localhost:5000${activities[index]['image']}',
-                                      fit: BoxFit.cover,
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                    ),
-                                    Positioned(
-                                      bottom: 13,
-                                      left: 10,
-                                      child: Container(
-                                        width: 185,
-                                        height: 60,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 4),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Color.fromARGB(
-                                              255, 255, 255, 255),
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              activities[index]['name'],
-                                              style: TextStyle(
-                                                fontSize: 10,
-                                                fontFamily: 'Times New Roman',
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 3.0),
-                                              child: Text(
-                                                activities[index]
-                                                    ['description'],
-                                                style: TextStyle(
-                                                  fontSize: 7.5,
-                                                  fontFamily: 'Times New Roman',
-                                                  color: Color.fromARGB(
-                                                      255, 122, 122, 122),
-                                                ),
-                                                maxLines: 3,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      bottom: 70,
-                                      right: 23,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(3),
-                                          color: const Color.fromARGB(
-                                              255, 255, 255, 255),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 3, right: 4),
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.star,
-                                                color: Colors.amber,
-                                                size: 10,
-                                              ),
-                                              SizedBox(
-                                                width: 2,
-                                              ),
-                                              Text(
-                                                activities[index]['rating']
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontSize: 8,
-                                                    color: Colors.black),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 27,
-            ),
-            Column(
-              children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 28.0),
-                      child: Text(
-                        'Top Destinations :',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'Times New Roman',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 30.0, bottom: 15),
-                    child: Row(
-                      children: List.generate(
-                        locations.length,
-                        (index) => Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {});
-                            },
-                            child: Container(
-                                width: 200,
-                                height: 90,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      spreadRadius: 0,
-                                      blurRadius: 2,
-                                      offset: Offset(1, 1),
-                                    ),
-                                  ],
-                                ),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 90,
-                                      child: Padding(
-                                        padding: EdgeInsets.all(9),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(11),
-                                          child: Image.network(
-                                            'http://localhost:5000${locations[index]['image']}',
-                                            fit: BoxFit.cover,
-                                            width: double.infinity,
-                                            height: double.infinity,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 15),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            width: 100,
-                                            child: Text(
-                                              locations[index]['name'],
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  fontFamily: 'Times New Roman',
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 100,
-                                            child: Text(
-                                              locations[index]['description'],
-                                              style: TextStyle(
-                                                fontSize: 9,
-                                                fontFamily: 'Times New Roman',
-                                                color: Color.fromARGB(
-                                                    255, 122, 122, 122),
-                                              ),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                )),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
             ),
           ],
         ),

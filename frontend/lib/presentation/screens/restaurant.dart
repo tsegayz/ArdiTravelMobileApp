@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors_in_immutables
 // ignore_for_file: use_key_in_widget_constructors
 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class Category {
@@ -25,6 +27,7 @@ class Attraction {
       required this.descr,
       required this.rating});
 }
+
 class Restaurant extends StatefulWidget {
   @override
   State<Restaurant> createState() => _RestaurantState();
@@ -83,6 +86,21 @@ class _RestaurantState extends State<Restaurant> {
   int selectedIndex = 0; // Track the selected index for category/regin
 
   int selected = 3; // Track the selected index for bottom nav bar
+
+  List<dynamic> restaurants = [];
+
+  Future<void> fetchRestaurants() async {
+    List<dynamic> fetchedRestaurants = await getRestaurants();
+    setState(() {
+      restaurants = fetchedRestaurants;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchRestaurants();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -445,7 +463,7 @@ class _RestaurantState extends State<Restaurant> {
                     padding: EdgeInsets.only(left: 30.0),
                     child: Row(
                       children: List.generate(
-                        attractions.length,
+                        restaurants.length,
                         (index) => Padding(
                           padding: EdgeInsets.symmetric(horizontal: 15.0),
                           child: GestureDetector(
@@ -459,8 +477,8 @@ class _RestaurantState extends State<Restaurant> {
                                 height: 190,
                                 child: Stack(
                                   children: [
-                                    Image.asset(
-                                      attractions[index].img,
+                                    Image.network(
+                                      'http://localhost:5000${restaurants[index]['image']}',
                                       fit: BoxFit.cover,
                                       width: double.infinity,
                                       height: double.infinity,
@@ -484,24 +502,37 @@ class _RestaurantState extends State<Restaurant> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  attractions[index].title,
-                                                  style: TextStyle(
-                                                      fontSize: 14,
+                                                SizedBox(
+                                                  width: 190,
+                                                  child: Text(
+                                                    restaurants[index]['name'],
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        fontFamily:
+                                                            'Times New Roman',
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.black),
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 150,
+                                                  child: Text(
+                                                    restaurants[index]
+                                                        ['description'],
+                                                    style: TextStyle(
+                                                      fontSize: 11,
                                                       fontFamily:
                                                           'Times New Roman',
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.black),
-                                                ),
-                                                Text(
-                                                  attractions[index].descr,
-                                                  style: TextStyle(
-                                                    fontSize: 11,
-                                                    fontFamily:
-                                                        'Times New Roman',
-                                                    color: Color.fromARGB(
-                                                        255, 122, 122, 122),
+                                                      color: Color.fromARGB(
+                                                          255, 122, 122, 122),
+                                                    ),
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   ),
                                                 ),
                                               ],
@@ -535,7 +566,7 @@ class _RestaurantState extends State<Restaurant> {
                                             child: Column(
                                               children: [
                                                 Text(
-                                                  attractions[index].rating,
+                                                  '4.8',
                                                   style: TextStyle(
                                                       fontSize: 12,
                                                       color: Colors.black),
@@ -642,7 +673,7 @@ class _RestaurantState extends State<Restaurant> {
                     'assets/tourist.png',
                     width: 26,
                     height: 26,
-                      color: Colors.white,
+                    color: Colors.white,
                   ),
                   label: '',
                 ),
@@ -676,5 +707,23 @@ class _RestaurantState extends State<Restaurant> {
         ),
       ),
     );
+  }
+}
+
+Future<List<dynamic>> getRestaurants() async {
+  try {
+    final response =
+        await http.get(Uri.parse('http://localhost:5000/api/v1/restaurants'));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      List<dynamic> restaurants = data['data']['restaurants'];
+      print(restaurants);
+      return restaurants;
+    } else {
+      return []; // Return an empty list if response status code is not 200
+    }
+  } catch (e) {
+    return []; // Return an empty list if an error occurs
   }
 }
