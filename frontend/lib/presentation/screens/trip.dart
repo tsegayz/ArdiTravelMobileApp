@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors_in_immutables
 // ignore_for_file: use_key_in_widget_constructors
 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class Category {
@@ -32,42 +34,52 @@ class Trip extends StatefulWidget {
 }
 
 class _TripState extends State<Trip> {
-  final List<Attraction> attractions = [
-    Attraction(
-        img: 'assets/welcome.jpg',
-        title: 'Abay fountain',
-        descr: 'Lorem ipsum dolor sit amet',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.6'),
-  ];
 
   int selectedIndex = 0; // Track the selected index for category/regin
 
   int selected = 2; // Track the selected index for bottom nav bar
+
+  List<dynamic> hotels = [];
+  List<dynamic> locations = [];
+  List<dynamic> restaurants = [];
+  List<dynamic> tourGuides = [];
+
+  Future<void> fetchLocations() async {
+    List<dynamic> fetchedLocations = await getLocation();
+    setState(() {
+      locations = fetchedLocations;
+    });
+  }
+
+  Future<void> fetchHotels() async {
+    List<dynamic> fetchedHotels = await getHotels();
+    setState(() {
+      hotels = fetchedHotels;
+    });
+  }
+
+  Future<void> fetchRestaurants() async {
+    List<dynamic> fetchedRestaurants = await getRestaurants();
+    setState(() {
+      restaurants = fetchedRestaurants;
+    });
+  }
+
+  Future<void> fetchTourGuides() async {
+    List<dynamic> fetchTourGuides = await getTourguides();
+    setState(() {
+      tourGuides = fetchTourGuides;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchLocations();
+    fetchHotels();
+    fetchRestaurants();
+    fetchTourGuides();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +180,7 @@ class _TripState extends State<Trip> {
                     padding: EdgeInsets.only(left: 30.0),
                     child: Row(
                       children: List.generate(
-                        attractions.length,
+                        locations.length,
                         (index) => Padding(
                           padding: EdgeInsets.symmetric(horizontal: 15.0),
                           child: GestureDetector(
@@ -182,28 +194,30 @@ class _TripState extends State<Trip> {
                                 height: 190,
                                 child: Stack(
                                   children: [
-                                    Image.asset(
-                                      attractions[index].img,
+                                    Image.network(
+                                      'http://localhost:5000${locations[index]['image']}',
                                       fit: BoxFit.cover,
                                       width: double.infinity,
                                       height: double.infinity,
                                     ),
                                     Container(
-                                      color: Color.fromARGB(88, 0, 0, 0),
+                                      color: Color.fromARGB(123, 0, 0, 0),
                                     ),
                                     Positioned(
                                       top: 5,
                                       child: Padding(
-                                        padding: const EdgeInsets.only(
+                                        padding: EdgeInsets.only(
                                             left: 24.0, top: 14),
                                         child: SizedBox(
                                           width: 100,
                                           child: Text(
-                                            attractions[index].title,
+                                            locations[index]['name'],
                                             style: TextStyle(
                                                 fontSize: 20,
                                                 fontFamily: 'lobster',
                                                 color: Colors.white),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
                                       ),
@@ -217,8 +231,8 @@ class _TripState extends State<Trip> {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(4),
-                                          color: Color.fromARGB(
-                                              117, 255, 255, 255),
+                                          color:
+                                              Color.fromARGB(76, 255, 255, 255),
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
@@ -239,9 +253,12 @@ class _TripState extends State<Trip> {
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      'Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, ',
+                                                      locations[index]
+                                                          ['description'],
                                                       style: TextStyle(
                                                           fontSize: 8,
+                                                          fontFamily:
+                                                              'Times New Roman',
                                                           color: Colors.white),
                                                     ),
                                                   ],
@@ -292,7 +309,7 @@ class _TripState extends State<Trip> {
                     padding: const EdgeInsets.only(left: 30.0, bottom: 5),
                     child: Row(
                       children: List.generate(
-                        attractions.length,
+                        hotels.length,
                         (index) => Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: GestureDetector(
@@ -325,8 +342,8 @@ class _TripState extends State<Trip> {
                                         child: SizedBox(
                                           width: 175,
                                           height: 130,
-                                          child: Image.asset(
-                                            attractions[index].img,
+                                          child: Image.network(
+                                            'http://localhost:5000${hotels[index]['image']}',
                                             fit: BoxFit.cover,
                                             width: double.infinity,
                                             height: double.infinity,
@@ -346,18 +363,20 @@ class _TripState extends State<Trip> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               SizedBox(
-                                                width: 100,
+                                                width: 110,
                                                 child: Text(
-                                                  attractions[index].title,
+                                                  hotels[index]['name'],
                                                   style: TextStyle(
                                                       fontSize: 11,
                                                       fontFamily: 'cambo',
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: Colors.black),
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
                                               ),
-                                              // SizedBox(width: 45),
                                               Icon(
                                                 Icons.favorite_border,
                                                 color: Colors.red,
@@ -393,7 +412,7 @@ class _TripState extends State<Trip> {
                                                     width: 2,
                                                   ),
                                                   Text(
-                                                    '${attractions[index].rating} rating',
+                                                    '${hotels[index]['rating']} rating',
                                                     style: TextStyle(
                                                         fontSize: 9,
                                                         color: Colors.black),
@@ -494,7 +513,7 @@ class _TripState extends State<Trip> {
                     padding: EdgeInsets.only(left: 40.0),
                     child: Row(
                       children: [
-                        for (int i = 0; i < attractions.length; i += 6)
+                        for (int i = 0; i < restaurants.length; i += 7)
                           Row(
                             children: [
                               Column(
@@ -504,13 +523,13 @@ class _TripState extends State<Trip> {
                                     height: 100,
                                     child: GestureDetector(
                                       onTap: () {
-                                        Navigator.pushNamed(context, '/home');
+                                        Navigator.pushNamed(context, '/restaurantDetail');
                                       },
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(15),
                                         child: Stack(children: [
-                                          Image.asset(
-                                            attractions[i].img,
+                                          Image.network(
+                                            'http://localhost:5000${restaurants[i]['image']}',
                                             fit: BoxFit.cover,
                                             width: double.infinity,
                                             height: double.infinity,
@@ -522,7 +541,7 @@ class _TripState extends State<Trip> {
                                               left: 10,
                                               bottom: 10,
                                               child: Text(
-                                                attractions[i].title,
+                                                restaurants[i]['name'],
                                                 style: TextStyle(
                                                     fontSize: 9,
                                                     fontFamily:
@@ -545,8 +564,8 @@ class _TripState extends State<Trip> {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(15),
                                         child: Stack(children: [
-                                          Image.asset(
-                                            attractions[i + 1].img,
+                                          Image.network(
+                                            'http://localhost:5000${restaurants[i + 1]['image']}',
                                             fit: BoxFit.cover,
                                             width: double.infinity,
                                             height: double.infinity,
@@ -558,7 +577,7 @@ class _TripState extends State<Trip> {
                                               left: 10,
                                               bottom: 10,
                                               child: Text(
-                                                attractions[i + 1].title,
+                                                restaurants[i + 1]['name'],
                                                 style: TextStyle(
                                                     fontSize: 9,
                                                     fontFamily:
@@ -585,8 +604,8 @@ class _TripState extends State<Trip> {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(15),
                                         child: Stack(children: [
-                                          Image.asset(
-                                            attractions[i + 2].img,
+                                          Image.network(
+                                            'http://localhost:5000${restaurants[i + 2]['image']}',
                                             fit: BoxFit.cover,
                                             width: double.infinity,
                                             height: double.infinity,
@@ -598,7 +617,7 @@ class _TripState extends State<Trip> {
                                               left: 10,
                                               bottom: 10,
                                               child: Text(
-                                                attractions[i + 2].title,
+                                                restaurants[i + 2]['name'],
                                                 style: TextStyle(
                                                     fontSize: 9,
                                                     fontFamily:
@@ -625,8 +644,8 @@ class _TripState extends State<Trip> {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(15),
                                         child: Stack(children: [
-                                          Image.asset(
-                                            attractions[i + 3].img,
+                                          Image.network(
+                                            'http://localhost:5000${restaurants[i + 3]['image']}',
                                             fit: BoxFit.cover,
                                             width: double.infinity,
                                             height: double.infinity,
@@ -638,7 +657,7 @@ class _TripState extends State<Trip> {
                                               left: 10,
                                               bottom: 10,
                                               child: Text(
-                                                attractions[i + 3].title,
+                                                restaurants[i + 3]['name'],
                                                 style: TextStyle(
                                                     fontSize: 9,
                                                     fontFamily:
@@ -664,8 +683,8 @@ class _TripState extends State<Trip> {
                                             borderRadius:
                                                 BorderRadius.circular(15),
                                             child: Stack(children: [
-                                              Image.asset(
-                                                attractions[i + 4].img,
+                                              Image.network(
+                                                'http://localhost:5000${restaurants[i + 4]['image']}',
                                                 fit: BoxFit.cover,
                                                 width: double.infinity,
                                                 height: double.infinity,
@@ -678,7 +697,7 @@ class _TripState extends State<Trip> {
                                                   left: 10,
                                                   bottom: 10,
                                                   child: Text(
-                                                    attractions[i + 4].title,
+                                                    restaurants[i + 4]['name'],
                                                     style: TextStyle(
                                                         fontSize: 9,
                                                         fontFamily:
@@ -702,8 +721,8 @@ class _TripState extends State<Trip> {
                                             borderRadius:
                                                 BorderRadius.circular(15),
                                             child: Stack(children: [
-                                              Image.asset(
-                                                attractions[i + 5].img,
+                                              Image.network(
+                                                'http://localhost:5000${restaurants[i + 5]['image']}',
                                                 fit: BoxFit.cover,
                                                 width: double.infinity,
                                                 height: double.infinity,
@@ -716,7 +735,7 @@ class _TripState extends State<Trip> {
                                                   left: 10,
                                                   bottom: 10,
                                                   child: Text(
-                                                    attractions[i + 5].title,
+                                                    restaurants[i + 5]['name'],
                                                     style: TextStyle(
                                                         fontSize: 9,
                                                         fontFamily:
@@ -750,7 +769,7 @@ class _TripState extends State<Trip> {
                     Padding(
                       padding: const EdgeInsets.only(left: 28.0),
                       child: Text(
-                        'Top Destinations :',
+                        'Tour Guides :',
                         style: TextStyle(
                           fontSize: 15,
                           fontFamily: 'Times New Roman',
@@ -768,7 +787,7 @@ class _TripState extends State<Trip> {
                     padding: const EdgeInsets.only(left: 20.0, bottom: 5),
                     child: Row(
                       children: List.generate(
-                        attractions.length,
+                        tourGuides.length,
                         (index) => Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: GestureDetector(
@@ -798,8 +817,8 @@ class _TripState extends State<Trip> {
                                         child: SizedBox(
                                           width: 75,
                                           height: 62,
-                                          child: Image.asset(
-                                            attractions[index].img,
+                                          child: Image.network(
+                                            'http://localhost:5000${tourGuides[index]['image']}',
                                             fit: BoxFit.cover,
                                             width: double.infinity,
                                             height: double.infinity,
@@ -815,29 +834,48 @@ class _TripState extends State<Trip> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            attractions[index].title,
+                                            tourGuides[index]['name'],
                                             style: TextStyle(
                                                 fontSize: 10,
                                                 fontFamily: 'Times New Roman',
                                                 color: Colors.black),
                                           ),
-                                          Text(
-                                            'works : ',
-                                            style: TextStyle(
-                                              fontSize: 11,
-                                              fontFamily: 'Times New Roman',
-                                              color: Color.fromARGB(
-                                                  255, 122, 122, 122),
+                                          SizedBox(
+                                            width: 70,
+                                            child: Text(
+                                              tourGuides[index]['featuring'],
+                                              style: TextStyle(
+                                                fontSize: 11,
+                                                fontFamily: 'Times New Roman',
+                                                color: Color.fromARGB(
+                                                    255, 122, 122, 122),
+                                              ),
+                                              maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                             ),
                                           ),
-                                          Text(
-                                            'rating : ',
-                                            style: TextStyle(
-                                              fontSize: 11,
-                                              fontFamily: 'Times New Roman',
-                                              color: Color.fromARGB(
-                                                  255, 122, 122, 122),
-                                            ),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.star,
+                                                color: Colors.amber,
+                                                size: 12,
+                                              ),
+                                              SizedBox(
+                                                width: 2,
+                                              ),
+                                              Text(
+                                                tourGuides[index]['rating']
+                                                    .toString(),
+                                                style: TextStyle(
+                                                  fontSize: 11,
+                                                  fontFamily: 'Times New Roman',
+                                                  color: Color.fromARGB(
+                                                      255, 122, 122, 122),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
@@ -929,5 +967,74 @@ class _TripState extends State<Trip> {
         ),
       ),
     );
+  }
+}
+
+Future<List<dynamic>> getLocation() async {
+  try {
+    final response =
+        await http.get(Uri.parse('http://localhost:5000/api/v1/locations'));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      List<dynamic> locations = data['data']['locations'];
+      return locations;
+    } else {
+      return []; // Return an empty list if response status code is not 200
+    }
+  } catch (e) {
+    return []; // Return an empty list if an error occurs
+  }
+}
+
+Future<List<dynamic>> getHotels() async {
+  try {
+    final response =
+        await http.get(Uri.parse('http://localhost:5000/api/v1/hotels'));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      List<dynamic> hotels = data['data']['hotels'];
+      return hotels;
+    } else {
+      return []; // Return an empty list if response status code is not 200
+    }
+  } catch (e) {
+    return []; // Return an empty list if an error occurs
+  }
+}
+
+Future<List<dynamic>> getRestaurants() async {
+  try {
+    final response =
+        await http.get(Uri.parse('http://localhost:5000/api/v1/restaurants'));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      List<dynamic> restaurants = data['data']['restaurants'];
+      print(restaurants);
+      return restaurants;
+    } else {
+      return []; // Return an empty list if response status code is not 200
+    }
+  } catch (e) {
+    return []; // Return an empty list if an error occurs
+  }
+}
+
+Future<List<dynamic>> getTourguides() async {
+  try {
+    final response =
+        await http.get(Uri.parse('http://localhost:5000/api/v1/tourGuides'));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      List<dynamic> tourGuides = data['data']['tourGuides'];
+      return tourGuides;
+    } else {
+      return []; // Return an empty list if response status code is not 200
+    }
+  } catch (e) {
+    return []; // Return an empty list if an error occurs
   }
 }

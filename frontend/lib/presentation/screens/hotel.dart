@@ -34,38 +34,6 @@ class Hotel extends StatefulWidget {
 }
 
 class _HotelState extends State<Hotel> {
-  final List<Attraction> attractions = [
-    Attraction(
-        img: 'assets/welcome.jpg',
-        title: 'Waterfall',
-        descr: 'Lorem ipsum dolor sit amet',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.6'),
-  ];
 
   int selectedIndex = 0; // Track the selected index for category/regin
 
@@ -275,7 +243,7 @@ class _HotelState extends State<Hotel> {
                     padding: EdgeInsets.only(left: 30.0),
                     child: Row(
                       children: List.generate(
-                        attractions.length,
+                        hotels.length,
                         (index) => Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
                           child: GestureDetector(
@@ -534,3 +502,4 @@ Future<List<dynamic>> getHotels() async {
     return []; // Return an empty list if an error occurs
   }
 }
+ 
