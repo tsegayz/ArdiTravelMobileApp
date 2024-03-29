@@ -1,6 +1,8 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors_in_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors_in_immutables, avoid_print
 // ignore_for_file: use_key_in_widget_constructors
 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class Category {
@@ -114,6 +116,42 @@ class _HomeState extends State<Home> {
   int selectedIndex = 0; // Track the selected index for category/regin
 
   int selected = 0; // Track the selected index for bottom nav bar
+  String enteredWord = '';
+  List<dynamic> locations = [];
+
+  Future<void> fetchLocations() async {
+    List<dynamic> fetchedLocations = await getLocation();
+    setState(() {
+      locations = fetchedLocations;
+    });
+  }
+
+  List<dynamic> _filteredLocation = [];
+  @override
+  void initState() {
+    super.initState();
+    _filteredLocation = locations;
+    fetchLocations();
+  }
+
+  void _runFilter(String word) {
+    setState(() {
+      enteredWord = word;
+    });
+
+    if (word.isEmpty) {
+      setState(() {
+        _filteredLocation = locations.toList();
+      });
+    } else {
+      setState(() {
+        _filteredLocation = locations
+            .where((location) =>
+                location['name'].toLowerCase().contains(word.toLowerCase()))
+            .toList();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -176,54 +214,110 @@ class _HomeState extends State<Home> {
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            Center(
-              child: Container(
-                margin: EdgeInsets.only(top: 40),
-                width: 320,
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color:
-                          Color.fromARGB(255, 134, 134, 134).withOpacity(0.5),
-                      spreadRadius: 1,
-                      blurRadius: 1,
-                      offset: Offset(0, 0),
-                    ),
-                  ],
-                  color: Color.fromARGB(255, 255, 255, 255),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 4.0),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Discover a location.....',
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(
-                                color: const Color.fromARGB(255, 192, 192, 192),
+            Stack(children: [
+              Center(
+                child: Container(
+                  margin: EdgeInsets.only(top: 40),
+                  width: 320,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    boxShadow: [
+                      BoxShadow(
+                        color:
+                            Color.fromARGB(255, 134, 134, 134).withOpacity(0.5),
+                        spreadRadius: 0.8,
+                        blurRadius: 0.5,
+                      ),
+                    ],
+                    color: Color.fromARGB(255, 255, 255, 255),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 4.0),
+                            child: TextField(
+                              onChanged: (value) => _runFilter(value),
+                              style: TextStyle(
                                 fontSize: 15,
-                                fontFamily: 'cambo',
+                                fontFamily: 'Times New Roman',
+                                color: Colors.black,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: 'Discover a location.....',
+                                border: InputBorder.none,
+                                hintStyle: TextStyle(
+                                  color:
+                                      const Color.fromARGB(255, 192, 192, 192),
+                                  fontSize: 15,
+                                  fontFamily: 'cambo',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Icon(
+                          Icons.search_rounded,
+                          color: Colors.grey,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 5,
+                left: 41,
+                child: Visibility(
+                  visible: enteredWord.isEmpty ? false : true,
+                  child: Container(
+                    margin: EdgeInsets.only(top: 8),
+                    width: 320,
+                    height: 70,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color.fromARGB(255, 134, 134, 134)
+                              .withOpacity(0.5),
+                          blurRadius: 1,
+                          offset: Offset(0, 1),
+                        ),
+                      ],
+                      color: Color.fromARGB(255, 255, 255, 255),
+                    ),
+                    child: ListView(
+                      scrollDirection: Axis.vertical,
+                      children: List.generate(
+                        _filteredLocation.length,
+                        (index) => Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 3.0),
+                              child: Text(
+                                _filteredLocation[index]['name'],
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontFamily: 'Times New Roman',
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                      Icon(
-                        Icons.search_rounded,
-                        color: Colors.grey,
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
+            ]),
             SizedBox(
               height: 38,
             ),
@@ -239,6 +333,7 @@ class _HomeState extends State<Home> {
                       onTap: () {
                         setState(() {
                           selectedIndex = index;
+                          getLocation();
                         });
                       },
                       child: Padding(
@@ -333,13 +428,11 @@ class _HomeState extends State<Home> {
                     padding: EdgeInsets.only(left: 30.0),
                     child: Row(
                       children: List.generate(
-                        attractions.length,
+                        locations.length,
                         (index) => Padding(
                           padding: EdgeInsets.symmetric(horizontal: 15.0),
                           child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/location');
-                            },
+                            onTap: () {},
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
                               child: SizedBox(
@@ -347,8 +440,8 @@ class _HomeState extends State<Home> {
                                 height: 275,
                                 child: Stack(
                                   children: [
-                                    Image.asset(
-                                      attractions[index].img,
+                                    Image.network(
+                                      'http://localhost:5000${locations[index]['image']}',
                                       fit: BoxFit.cover,
                                       width: double.infinity,
                                       height: double.infinity,
@@ -357,34 +450,35 @@ class _HomeState extends State<Home> {
                                       bottom: 13,
                                       left: 10,
                                       child: Container(
-                                        width: 180,
+                                        width: 185,
+                                        height: 60,
                                         padding: EdgeInsets.all(2),
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
-                                          color: const Color.fromARGB(
+                                          color: Color.fromARGB(
                                               255, 255, 255, 255),
                                         ),
                                         child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              8, 1, 8, 7),
+                                          padding:
+                                              const EdgeInsets.only(left: 8),
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                attractions[index].title,
+                                                locations[index]['name'],
                                                 style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontFamily:
-                                                        'Times New Roman',
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
+                                                  fontSize: 10,
+                                                  fontFamily: 'Times New Roman',
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
                                               ),
                                               Text(
-                                                attractions[index].descr,
+                                                locations[index]['description'],
                                                 style: TextStyle(
-                                                  fontSize: 11,
+                                                  fontSize: 7.5,
                                                   fontFamily: 'Times New Roman',
                                                   color: Color.fromARGB(
                                                       255, 122, 122, 122),
@@ -396,37 +490,40 @@ class _HomeState extends State<Home> {
                                       ),
                                     ),
                                     Positioned(
-                                      bottom: 53,
-                                      right: 25,
+                                      bottom: 70,
+                                      right: 23,
                                       child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(3),
+                                          color: const Color.fromARGB(
+                                              255, 255, 255, 255),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 3, right: 4),
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.star,
+                                                color: Colors.amber,
+                                                size: 10,
+                                              ),
+                                              SizedBox(
+                                                width: 2,
+                                              ),
+                                              Text(
+                                                locations[index]['review']
+                                                        ['rating']
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 8,
+                                                    color: Colors.black),
+                                              ),
+                                            ],
                                           ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 3, right: 4, bottom: 4),
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.star,
-                                                  color: Colors.amber,
-                                                  size: 12,
-                                                ),
-                                                SizedBox(
-                                                  width: 2,
-                                                ),
-                                                Text(
-                                                  attractions[index].rating,
-                                                  style: TextStyle(
-                                                      fontSize: 10,
-                                                      color: Colors.black),
-                                                ),
-                                              ],
-                                            ),
-                                          )),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -437,7 +534,7 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                   ),
-                ),
+                )
               ],
             ),
             SizedBox(
@@ -605,13 +702,36 @@ class _HomeState extends State<Home> {
                     label: ''),
               ],
               onDestinationSelected: (index) {
-                Navigator.of(context).pushNamed(
-                    ['/home','/hotel', '/trip',  '/restaurant', '/profile'][index]);
+                Navigator.of(context).pushNamed([
+                  '/home',
+                  '/hotel',
+                  '/trip',
+                  '/restaurant',
+                  '/profile'
+                ][index]);
               },
             ),
           ),
         ),
       ),
     );
+  }
+}
+
+Future<List<dynamic>> getLocation() async {
+  try {
+    final response =
+        await http.get(Uri.parse('http://localhost:5000/api/v1/locations'));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      List<dynamic> locations = data['data']['locations'];
+      return locations;
+    } else {
+      return []; // Return an empty list if response status code is not 200
+    }
+  } catch (e) {
+    print(e.toString());
+    return []; // Return an empty list if an error occurs
   }
 }
