@@ -2,7 +2,6 @@
 // ignore_for_file: use_key_in_widget_constructors
 
 import 'dart:convert';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
@@ -106,7 +105,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _filteredLocation = locations;
+    // _filteredLocation = locations;
     fetchLocations();
     fetchActivities();
   }

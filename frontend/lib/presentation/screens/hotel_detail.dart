@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors_in_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors_in_immutables, must_be_immutable, unused_element
 // ignore_for_file: use_key_in_widget_constructors
 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Category {
   final String title;
@@ -35,6 +36,10 @@ class BottomBar {
 }
 
 class HotelDetail extends StatefulWidget {
+  final Map<String, dynamic> data;
+
+  HotelDetail({required this.data});
+
   @override
   State<HotelDetail> createState() => _HotelDetailState();
 }
@@ -72,6 +77,7 @@ class _HotelDetailState extends State<HotelDetail> {
         descr: 'Lorem ipsum dolor sit amet ',
         rating: '4.6'),
   ];
+
   final List<Category> amenities = [
     Category(
       title: 'sunning',
@@ -91,16 +97,45 @@ class _HotelDetailState extends State<HotelDetail> {
     ),
   ];
 
-  int selectedIndex = 0; // Track the selected index for category/regin
+  int selectedIndex = 0;
 
-  int selected = 2; // Track the selected index for bottom nav bar
+  int selected = 2;
 
   @override
   Widget build(BuildContext context) {
+    final id = widget.data['_id'];
+    final name = widget.data['name'];
+    final imagePath = 'http://localhost:5000${widget.data['image']}';
+    final description = widget.data['description'];
+    final rating = widget.data['rating'];
+
+    final Map<String, dynamic> pics;
+
+    List<dynamic> hotelRoom = [];
+    List<dynamic> filteredHotelRoom = [];
+
+    Future<void> fetchHotelRoom() async {
+      List<dynamic> fetchedHotelRoom = await getHotelRoom();
+      setState(() {
+        hotelRoom = fetchedHotelRoom;
+      });
+    }
+
+    @override
+    void initState() {
+      super.initState();
+      fetchHotelRoom();
+    }
+
+    void runFilter(String word) {
+
+    }
+
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
               height: 430,
@@ -108,12 +143,13 @@ class _HotelDetailState extends State<HotelDetail> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(50),
-                        bottomRight: Radius.circular(50)),
+                      bottomLeft: Radius.circular(50),
+                      bottomRight: Radius.circular(50),
+                    ),
                     child: SizedBox(
                       height: 400,
-                      child: Image.asset(
-                        'assets/asella.jpeg',
+                      child: Image.network(
+                        imagePath,
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: double.infinity,
@@ -138,13 +174,18 @@ class _HotelDetailState extends State<HotelDetail> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Hotel name',
-                            style: TextStyle(
-                                fontSize: 24,
-                                fontFamily: 'Times New Roman',
-                                color: Colors.white),
+                          SizedBox(
+                            width: 280,
+                            child: Text(
+                              name,
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  fontFamily: 'Times New Roman',
+                                  color: Colors.white,
+                                  height: 1),
+                            ),
                           ),
+                          SizedBox(height: 8),
                           Row(
                             children: [
                               Icon(
@@ -190,14 +231,14 @@ class _HotelDetailState extends State<HotelDetail> {
                           child: Column(
                             children: [
                               Text(
-                                '50\$',
+                                rating.toString(),
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 28,
                                     fontFamily: 'cambo'),
                               ),
                               Text(
-                                '/Night',
+                                '/likes',
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
@@ -230,7 +271,7 @@ class _HotelDetailState extends State<HotelDetail> {
               height: 22,
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 28),
+              padding: const EdgeInsets.only(left: 28.0),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -246,7 +287,7 @@ class _HotelDetailState extends State<HotelDetail> {
                       padding:
                           const EdgeInsets.only(left: 15, right: 40, top: 10),
                       child: Text(
-                        'Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet',
+                        description,
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 12,
@@ -439,5 +480,22 @@ class _HotelDetailState extends State<HotelDetail> {
         ),
       ),
     );
+  }
+}
+
+Future<List<dynamic>> getHotelRoom() async {
+  try {
+    final response =
+        await http.get(Uri.parse('http://localhost:5000/api/v1/hotels'));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      List<dynamic> hotels = data['data']['hotels'];
+      return hotels;
+    } else {
+      return []; // Return an empty list if response status code is not 200
+    }
+  } catch (e) {
+    return []; // Return an empty list if an error occurs
   }
 }

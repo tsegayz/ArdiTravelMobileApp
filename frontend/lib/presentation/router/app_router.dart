@@ -32,7 +32,12 @@ class AppRouter {
       case '/hotel':
         return MaterialPageRoute(builder: (_) => Hotel());
       case '/hotelDetail':
-        return MaterialPageRoute(builder: (_) => HotelDetail());
+        final args = routeSettings.arguments;
+        if (args != null && args is Map<String, dynamic>) {
+          final data = args['data'] as Map<String, dynamic>;
+          return MaterialPageRoute(builder: (_) => HotelDetail(data: data));
+        }
+        return null;
       case '/hotelBook':
         return MaterialPageRoute(builder: (_) => HotelBook());
       case '/location':
@@ -45,7 +50,7 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => RestaurantBook());
       case '/trip':
         return MaterialPageRoute(builder: (_) => Trip());
-      
+
       default:
         return null;
     }

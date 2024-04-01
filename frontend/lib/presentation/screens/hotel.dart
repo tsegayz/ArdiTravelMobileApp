@@ -15,31 +15,17 @@ class Category {
   });
 }
 
-class Attraction {
-  final String img;
-  final String title;
-  final String descr;
-  final String rating;
-
-  Attraction(
-      {required this.img,
-      required this.title,
-      required this.descr,
-      required this.rating});
-}
-
 class Hotel extends StatefulWidget {
   @override
   State<Hotel> createState() => _HotelState();
 }
 
 class _HotelState extends State<Hotel> {
-
-  int selectedIndex = 0; // Track the selected index for category/regin
-
-  int selected = 1; // Track the selected index for bottom nav bar
-
+  int selectedIndex = 0;
+  String enteredWord = '';
+  int selected = 1;
   List<dynamic> hotels = [];
+  List<dynamic> _filteredHotels = [];
 
   Future<void> fetchHotels() async {
     List<dynamic> fetchedHotels = await getHotels();
@@ -53,6 +39,32 @@ class _HotelState extends State<Hotel> {
     super.initState();
     fetchHotels();
   }
+
+  void _runFilter(String word) {
+    setState(() {
+      enteredWord = word;
+    });
+
+    if (word.isEmpty) {
+      setState(() {
+        _filteredHotels = hotels.toList();
+      });
+    } else {
+      setState(() {
+        _filteredHotels = hotels
+            .where((hotel) =>
+                hotel['name'].toLowerCase().contains(word.toLowerCase()))
+            .toList();
+      });
+    }
+  }
+
+  // void handleHotelClick (){
+  //   _filteredHotels = hotels
+  //           .where((hotel) =>
+  //               hotel['name'].toLowerCase().contains(word.toLowerCase()))
+  //           .toList();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -113,302 +125,360 @@ class _HotelState extends State<Hotel> {
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 28, top: 30),
-              child: Text(
-                'Discover',
-                style: TextStyle(
-                    fontSize: 18,
-                    height: 1,
-                    fontFamily: 'cambo',
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 28),
-              child: Text(
-                'hotel of your choice',
-                style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: 'cambo',
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 20, right: 10, left: 10),
-                    width: 280,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color.fromARGB(255, 134, 134, 134)
-                              .withOpacity(0.5),
-                          spreadRadius: 1,
-                          blurRadius: 1,
-                          offset: Offset(0, 0),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 28, top: 30),
+                  child: Text(
+                    'Discover',
+                    style: TextStyle(
+                        fontSize: 18,
+                        height: 1,
+                        fontFamily: 'cambo',
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 28),
+                  child: Text(
+                    'hotel of your choice',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: 'cambo',
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 20, right: 10, left: 10),
+                        width: 280,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromARGB(255, 134, 134, 134)
+                                  .withOpacity(0.5),
+                              blurRadius: 1,
+                              offset: Offset(0, 1),
+                            ),
+                          ],
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Icon(
+                                Icons.search_rounded,
+                                color: Colors.grey,
+                                size: 25,
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.only(bottom: 12, left: 10),
+                                  child: TextField(
+                                    onChanged: (value) => _runFilter(value),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: 'Times New Roman',
+                                    ),
+                                    decoration: InputDecoration(
+                                      hintText: 'Discover a location.....',
+                                      border: InputBorder.none,
+                                      hintStyle: TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 192, 192, 192),
+                                        fontSize: 15,
+                                        fontFamily: 'cambo',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromARGB(255, 134, 134, 134)
+                                  .withOpacity(0.5),
+                              spreadRadius: 1,
+                              blurRadius: 1,
+                              offset: Offset(0, 0),
+                            ),
+                          ],
+                          color: Color(0xFF2A4244),
+                        ),
+                        child: Icon(
+                          Icons.apps_rounded,
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 38,
+                ),
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 28.0),
+                          child: Text(
+                            'Popular',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'cambo',
+                            ),
+                          ),
                         ),
                       ],
-                      color: Color.fromARGB(255, 255, 255, 255),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Icon(
-                            Icons.search_rounded,
-                            color: Colors.grey,
-                            size: 25,
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(bottom: 12, left: 10),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: 'Discover a location.....',
-                                  border: InputBorder.none,
-                                  hintStyle: TextStyle(
-                                    color: Color.fromARGB(255, 192, 192, 192),
-                                    fontSize: 15,
-                                    fontFamily: 'cambo',
+                    SizedBox(
+                      height: 20,
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 30.0),
+                        child: Row(
+                          children: List.generate(
+                            hotels.length,
+                            (index) => Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/hotelDetail',
+                                    arguments: {'data': hotels[index]},
+                                  );
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: SizedBox(
+                                    width: 80,
+                                    height: 80,
+                                    child: Stack(
+                                      children: [
+                                        Image.network(
+                                          'http://localhost:5000${hotels[index]['image']}',
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color.fromARGB(255, 134, 134, 134)
-                              .withOpacity(0.5),
-                          spreadRadius: 1,
-                          blurRadius: 1,
-                          offset: Offset(0, 0),
-                        ),
-                      ],
-                      color: Color(0xFF2A4244),
-                    ),
-                    child: Icon(
-                      Icons.apps_rounded,
-                      color: Colors.white,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 38,
-            ),
-            Column(
-              children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 28.0),
-                      child: Text(
-                        'Popular',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'cambo',
                         ),
                       ),
                     ),
                   ],
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 30,
                 ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 30.0),
-                    child: Row(
-                      children: List.generate(
-                        hotels.length,
-                        (index) => Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/location');
-                            },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: SizedBox(
-                                width: 80,
-                                height: 80,
-                                child: Stack(
-                                  children: [
-                                    Image.network(
-                                      'http://localhost:5000${hotels[index]['image']}',
-                                      fit: BoxFit.cover,
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                    ),
-                                  ],
-                                ),
-                              ),
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 28.0),
+                          child: Text(
+                            'All per your need ',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'cambo',
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Column(
-              children: [
-                Row(
-                  children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 28.0),
-                      child: Text(
-                        'All per your need ',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'cambo',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(30, 4, 30, 20),
-                  child: SizedBox(
-                    height: 330,
-                    child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 20.0,
-                      ),
-                      itemCount: hotels.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/hotelDetail');
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 9.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(24),
-                              child: SizedBox(
-                                width: 207,
-                                height: 275,
-                                child: Stack(
-                                  children: [
-                                    Image.network(
-                                      'http://localhost:5000${hotels[index]['image']}',
-                                      fit: BoxFit.cover,
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                    ),
-                                    Container(
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                      color: Color.fromARGB(131, 0, 0, 0),
-                                    ),
-                                    Positioned(
-                                      bottom: 13,
-                                      left: 4,
-                                      child: Container(
-                                        width: 190,
-                                        padding: EdgeInsets.all(2),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsets.fromLTRB(8, 1, 8, 7),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                width: 130,
-                                                child: Text(
-                                                  hotels[index]['name'],
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontFamily:
-                                                          'Times New Roman',
-                                                      color: Colors.white),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 90,
-                                                child: Text(
-                                                  hotels[index]['description'],
-                                                  style: TextStyle(
-                                                      fontSize: 9,
-                                                      color: Colors.white),
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                      padding: EdgeInsets.fromLTRB(30, 4, 30, 20),
+                      child: SizedBox(
+                        height: 330,
+                        child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 20.0,
+                          ),
+                          itemCount: hotels.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, '/hotelDetail/index');
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 9.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(24),
+                                  child: SizedBox(
+                                    width: 207,
+                                    height: 275,
+                                    child: Stack(
+                                      children: [
+                                        Image.network(
+                                          'http://localhost:5000${hotels[index]['image']}',
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                          height: double.infinity,
                                         ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 18,
-                                      top: 20,
-                                      child: Container(
-                                        width: 26,
-                                        height: 26,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(50),
+                                        Container(
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                          color: Color.fromARGB(131, 0, 0, 0),
                                         ),
-                                        child: Stack(
-                                          children: [
-                                            Center(
-                                              child: Icon(
-                                                size: 18,
-                                                Icons.favorite_border,
-                                                color: Colors.red,
+                                        Positioned(
+                                          bottom: 13,
+                                          left: 4,
+                                          child: Container(
+                                            width: 190,
+                                            padding: EdgeInsets.all(2),
+                                            child: Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  8, 1, 8, 7),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 130,
+                                                    child: Text(
+                                                      hotels[index]['name'],
+                                                      style: TextStyle(
+                                                          fontSize: 15,
+                                                          fontFamily:
+                                                              'Times New Roman',
+                                                          color: Colors.white),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 90,
+                                                    child: Text(
+                                                      hotels[index]
+                                                          ['description'],
+                                                      style: TextStyle(
+                                                          fontSize: 9,
+                                                          color: Colors.white),
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  ],
+                                        Positioned(
+                                          right: 18,
+                                          top: 20,
+                                          child: Container(
+                                            width: 26,
+                                            height: 26,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                            ),
+                                            child: Stack(
+                                              children: [
+                                                Center(
+                                                  child: Icon(
+                                                    size: 18,
+                                                    Icons.favorite_border,
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+                            );
+                          },
+                        ),
+                      ),
+                    )
+                  ],
                 )
               ],
-            )
+            ),
+            Visibility(
+              visible: enteredWord.isEmpty ? false : true,
+              child: Container(
+                margin: EdgeInsets.only(top: 150, left: 40),
+                width: 280,
+                height: 70,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  boxShadow: [
+                    BoxShadow(
+                      color:
+                          Color.fromARGB(255, 134, 134, 134).withOpacity(0.5),
+                      blurRadius: 1,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
+                  color: Color.fromARGB(255, 255, 255, 255),
+                ),
+                child: ListView(
+                  scrollDirection: Axis.vertical,
+                  children: List.generate(
+                    _filteredHotels.length,
+                    (index) => GestureDetector(
+                      onTap: () {},
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 3.0, horizontal: 15.0),
+                        child: Text(
+                          _filteredHotels[index]['name'],
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontFamily: 'Times New Roman',
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -502,4 +572,3 @@ Future<List<dynamic>> getHotels() async {
     return []; // Return an empty list if an error occurs
   }
 }
- 
