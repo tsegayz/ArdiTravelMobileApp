@@ -59,13 +59,6 @@ class _HotelState extends State<Hotel> {
     }
   }
 
-  // void handleHotelClick (){
-  //   _filteredHotels = hotels
-  //           .where((hotel) =>
-  //               hotel['name'].toLowerCase().contains(word.toLowerCase()))
-  //           .toList();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -333,7 +326,10 @@ class _HotelState extends State<Hotel> {
                             return GestureDetector(
                               onTap: () {
                                 Navigator.pushNamed(
-                                    context, '/hotelDetail/index');
+                                  context,
+                                  '/hotelDetail',
+                                  arguments: {'data': hotels[index]},
+                                );
                               },
                               child: Padding(
                                 padding:
@@ -461,10 +457,15 @@ class _HotelState extends State<Hotel> {
                   children: List.generate(
                     _filteredHotels.length,
                     (index) => GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/hotelDetail',
+                          arguments: {'data': _filteredHotels[index]},
+                        );
+                      },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 3.0, horizontal: 15.0),
+                        padding: const EdgeInsets.fromLTRB(15, 8, 15, 0),
                         child: Text(
                           _filteredHotels[index]['name'],
                           style: TextStyle(

@@ -34,7 +34,6 @@ class Trip extends StatefulWidget {
 }
 
 class _TripState extends State<Trip> {
-
   int selectedIndex = 0; // Track the selected index for category/regin
 
   int selected = 2; // Track the selected index for bottom nav bar
@@ -314,7 +313,11 @@ class _TripState extends State<Trip> {
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: GestureDetector(
                             onTap: () {
-                              setState(() {});
+                              Navigator.pushNamed(
+                                context,
+                                '/hotelDetail',
+                                arguments: {'data': hotels[index]},
+                              );
                             },
                             child: Container(
                                 width: 190,
@@ -523,7 +526,11 @@ class _TripState extends State<Trip> {
                                     height: 100,
                                     child: GestureDetector(
                                       onTap: () {
-                                        Navigator.pushNamed(context, '/restaurantDetail');
+                                        Navigator.pushNamed(
+                                          context,
+                                          '/restaurantDetail',
+                                          arguments: {'data': restaurants[i]},
+                                        );
                                       },
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(15),
@@ -559,7 +566,12 @@ class _TripState extends State<Trip> {
                                     child: GestureDetector(
                                       onTap: () {
                                         Navigator.pushNamed(
-                                            context, '/location');
+                                          context,
+                                          '/restaurantDetail',
+                                          arguments: {
+                                            'data': restaurants[i + 1]
+                                          },
+                                        );
                                       },
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(15),
@@ -599,7 +611,12 @@ class _TripState extends State<Trip> {
                                     child: GestureDetector(
                                       onTap: () {
                                         Navigator.pushNamed(
-                                            context, '/location');
+                                          context,
+                                          '/restaurantDetail',
+                                          arguments: {
+                                            'data': restaurants[i + 2]
+                                          },
+                                        );
                                       },
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(15),
@@ -639,7 +656,12 @@ class _TripState extends State<Trip> {
                                     child: GestureDetector(
                                       onTap: () {
                                         Navigator.pushNamed(
-                                            context, '/location');
+                                          context,
+                                          '/restaurantDetail',
+                                          arguments: {
+                                            'data': restaurants[i + 3]
+                                          },
+                                        );
                                       },
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(15),
@@ -677,7 +699,12 @@ class _TripState extends State<Trip> {
                                         child: GestureDetector(
                                           onTap: () {
                                             Navigator.pushNamed(
-                                                context, '/location');
+                                              context,
+                                              '/restaurantDetail',
+                                              arguments: {
+                                                'data': restaurants[i + 4]
+                                              },
+                                            );
                                           },
                                           child: ClipRRect(
                                             borderRadius:
@@ -715,7 +742,12 @@ class _TripState extends State<Trip> {
                                         child: GestureDetector(
                                           onTap: () {
                                             Navigator.pushNamed(
-                                                context, '/location');
+                                              context,
+                                              '/restaurantDetail',
+                                              arguments: {
+                                                'data': restaurants[i + 5]
+                                              },
+                                            );
                                           },
                                           child: ClipRRect(
                                             borderRadius:
@@ -851,8 +883,7 @@ class _TripState extends State<Trip> {
                                                     255, 122, 122, 122),
                                               ),
                                               maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
                                           Row(

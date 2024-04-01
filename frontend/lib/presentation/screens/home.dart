@@ -85,6 +85,7 @@ class _HomeState extends State<Home> {
   String enteredWord = '';
 
   List<dynamic> locations = [];
+  List<dynamic> locationType = [];
   List<dynamic> _filteredLocation = [];
   List<dynamic> activities = [];
 
@@ -92,6 +93,13 @@ class _HomeState extends State<Home> {
     List<dynamic> fetchedLocations = await getLocation();
     setState(() {
       locations = fetchedLocations;
+    });
+  }
+
+  Future<void> fetchLocationType() async {
+    List<dynamic> fetchedLocationType = await getLocationType();
+    setState(() {
+      locationType = fetchedLocationType;
     });
   }
 
@@ -105,8 +113,8 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    // _filteredLocation = locations;
     fetchLocations();
+    fetchLocationType();
     fetchActivities();
   }
 
@@ -117,13 +125,14 @@ class _HomeState extends State<Home> {
 
     if (word.isEmpty) {
       setState(() {
-        _filteredLocation = locations.toList();
+        _filteredLocation = locationType.toList();
       });
     } else {
       setState(() {
-        _filteredLocation = locations
-            .where((location) =>
-                location['name'].toLowerCase().contains(word.toLowerCase()))
+        _filteredLocation = locationType
+            .where((locationType) => locationType['region']
+                .toLowerCase()
+                .contains(word.toLowerCase()))
             .toList();
       });
     }
@@ -338,7 +347,7 @@ class _HomeState extends State<Home> {
                         Padding(
                           padding: const EdgeInsets.only(left: 28.0),
                           child: Text(
-                            'Trending Activities :',
+                            'Trending Attractions :',
                             style: TextStyle(
                               fontSize: 15,
                               fontFamily: 'Times New Roman',
@@ -360,7 +369,13 @@ class _HomeState extends State<Home> {
                             (index) => Padding(
                               padding: EdgeInsets.symmetric(horizontal: 15.0),
                               child: GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/attractionDetail',
+                                    arguments: {'data': activities[index]},
+                                  );
+                                },
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(20),
                                   child: SizedBox(
@@ -615,12 +630,18 @@ class _HomeState extends State<Home> {
                     children: List.generate(
                       _filteredLocation.length,
                       (index) => GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/location',
+                            arguments: {'data': _filteredLocation[index]},
+                          );
+                        },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 3.0, horizontal: 15.0),
                           child: Text(
-                            _filteredLocation[index]['name'],
+                            _filteredLocation[index]['region'],
                             style: TextStyle(
                               fontSize: 11,
                               fontFamily: 'Times New Roman',
@@ -708,6 +729,23 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+}
+
+Future<List<dynamic>> getLocationType() async {
+  try {
+    final response =
+        await http.get(Uri.parse('http://localhost:5000/api/v1/locationtype'));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      List<dynamic> locationTypes = data['data']['locationTypes'];
+      return locationTypes;
+    } else {
+      return []; // Return an empty list if response status code is not 200
+    }
+  } catch (e) {
+    return []; // Return an empty lidst if an error occurs
   }
 }
 

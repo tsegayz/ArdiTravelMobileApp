@@ -28,7 +28,13 @@ class AppRouter {
       case '/profile':
         return MaterialPageRoute(builder: (_) => Profile());
       case '/attractionDetail':
-        return MaterialPageRoute(builder: (_) => AttractionDetail());
+        final args = routeSettings.arguments;
+        if (args != null && args is Map<String, dynamic>) {
+          final data = args['data'] as Map<String, dynamic>;
+          return MaterialPageRoute(
+              builder: (_) => AttractionDetail(data: data));
+        }
+        return null;
       case '/hotel':
         return MaterialPageRoute(builder: (_) => Hotel());
       case '/hotelDetail':
@@ -41,11 +47,22 @@ class AppRouter {
       case '/hotelBook':
         return MaterialPageRoute(builder: (_) => HotelBook());
       case '/location':
-        return MaterialPageRoute(builder: (_) => Location());
+        final args = routeSettings.arguments;
+        if (args != null && args is Map<String, dynamic>) {
+          final data = args['data'] as Map<String, dynamic>;
+          return MaterialPageRoute(
+              builder: (_) => Location(data: data));
+        }
+        return null;
       case '/restaurant':
         return MaterialPageRoute(builder: (_) => Restaurant());
       case '/restaurantDetail':
-        return MaterialPageRoute(builder: (_) => RestaurantDetail());
+        final args = routeSettings.arguments;
+        if (args != null && args is Map<String, dynamic>) {
+          final data = args['data'] as Map<String, dynamic>;
+          return MaterialPageRoute(builder: (_) => Location(data: data));
+        }
+        return null;
       case '/restaurantBook':
         return MaterialPageRoute(builder: (_) => RestaurantBook());
       case '/trip':

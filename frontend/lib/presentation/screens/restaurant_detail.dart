@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors_in_immutables
 // ignore_for_file: use_key_in_widget_constructors
 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class Category {
@@ -34,6 +36,9 @@ class BottomBar {
 }
 
 class RestaurantDetail extends StatefulWidget {
+  final Map<String, dynamic> data;
+
+  RestaurantDetail({required this.data});
   @override
   State<RestaurantDetail> createState() => _RestaurantDetailState();
 }
@@ -54,43 +59,32 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
     ),
   ];
 
-  final List<Attraction> attractions = [
-    Attraction(
-        img: 'assets/welcome.jpg',
-        title: 'Waterfall',
-        descr: 'Lorem ipsum dolor',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor ',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor ',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor ',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor ',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor ',
-        rating: '4.6'),
-  ];
+  int selectedIndex = 0;
 
-  int selectedIndex = 0; // Track the selected index for category/regin
+  late int id;
+  int selected = 2;
+  List<dynamic> meal = [];
+  List<dynamic> filteredMeal = [];
+
+  Future<void> fetchMeal() async {
+    List<dynamic> fetchedMeal = await getMeals();
+    setState(() {
+      meal = fetchedMeal;
+      filteredMeal = meal.where((food) => food['restaurant_id'] == id).toList();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    id = widget.data['_id'];
+    fetchMeal();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final name = widget.data['name'];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
@@ -154,7 +148,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
             Padding(
               padding: const EdgeInsets.only(left: 32, top: 30),
               child: Text(
-                'Lets eat',
+                'Lets eat at',
                 style: TextStyle(
                   fontSize: 18,
                   height: 1,
@@ -165,7 +159,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
             Padding(
               padding: const EdgeInsets.only(left: 32),
               child: Text(
-                'Quality Food',
+                name,
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.amber,
@@ -207,8 +201,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                         ),
                         Expanded(
                           child: Padding(
-                            padding:
-                                EdgeInsets.only(bottom: 8.0, left: 3),
+                            padding: EdgeInsets.only(bottom: 8.0, left: 3),
                             child: TextField(
                               style: TextStyle(fontSize: 14),
                               decoration: InputDecoration(
@@ -362,98 +355,92 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
             SizedBox(
               height: 25,
             ),
-            Column(
-              children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 50.0),
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 0.0,
-                        mainAxisSpacing: 30.0,
-                      ),
-                      itemCount: attractions.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: 120,
-                              height: 120,
-                              child: ClipRRect(
+            SizedBox(
+              height: 270,
+              child: Column(
+                children: [
+                  SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 30.0),
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 0.0,
+                          mainAxisSpacing: 30.0,
+                        ),
+                        itemCount: filteredMeal.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ClipRRect(
                                 borderRadius: BorderRadius.circular(100),
-                                child: Image.asset(
-                                  attractions[index].img,
+                                child: Image.network(
+                                  'http://localhost:5000${filteredMeal[index]['image']}',
+                                  width: 100,
+                                  height: 100,
                                   fit: BoxFit.cover,
-                                  width: double.infinity,
-                                  height: double.infinity,
                                 ),
                               ),
-                            ),
-                            Container(
-                              width: 145,
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 15,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 255, 255, 255),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    attractions[index].title,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      height: 1,
-                                      fontFamily: 'Times New Roman',
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  Text(
-                                    attractions[index].descr,
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      fontFamily: 'Times New Roman',
-                                      color: Color.fromARGB(255, 122, 122, 122),
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        '\$15 - \$25',
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          fontFamily: 'cambo',
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
+                              SizedBox(
+                                width: 148,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      filteredMeal[index]['name'],
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        height: 1,
+                                        fontFamily: 'Times New Roman',
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
                                       ),
-                                      Icon(
-                                        Icons.favorite_border_rounded,
-                                        color: Colors.red,
-                                        size: 16,
-                                      )
-                                    ],
-                                  ),
-                                ],
+                                    ),
+                                    Text(
+                                      filteredMeal[index]['description'],
+                                      style: TextStyle(
+                                        fontSize: 8,
+                                        fontFamily: 'Times New Roman',
+                                        color: Color.fromARGB(255, 122, 122, 122),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 4.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '\$ ${filteredMeal[index]['price'].toString()}',
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              fontFamily: 'cambo',
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons.favorite_border_rounded,
+                                            color: Colors.red,
+                                            size: 14,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        );
-                      },
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             SizedBox(
               height: 25,
@@ -501,8 +488,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                       ],
                     ),
                     child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 90),
+                      padding: EdgeInsets.symmetric(horizontal: 90, vertical:6),
                       child: TextButton(
                         onPressed: () {
                           Navigator.pushNamed(context, '/restaurantBook');
@@ -528,5 +514,22 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
         ),
       ),
     );
+  }
+}
+
+Future<List<dynamic>> getMeals() async {
+  try {
+    final response =
+        await http.get(Uri.parse('http://localhost:5000/api/v1/meals'));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      List<dynamic> meals = data['data']['meals'];
+      return meals;
+    } else {
+      return [];
+    }
+  } catch (e) {
+    return [];
   }
 }

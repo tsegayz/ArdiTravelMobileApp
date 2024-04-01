@@ -51,7 +51,7 @@ class _RestaurantState extends State<Restaurant> {
   ];
 
   int selectedIndex = 0;
-  int selected = 3; 
+  int selected = 3;
   String enteredWord = '';
   List<dynamic> restaurants = [];
   List<dynamic> _filteredRestaurants = [];
@@ -68,6 +68,7 @@ class _RestaurantState extends State<Restaurant> {
     super.initState();
     fetchRestaurants();
   }
+
   void _runFilter(String word) {
     setState(() {
       enteredWord = word;
@@ -86,6 +87,7 @@ class _RestaurantState extends State<Restaurant> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -191,13 +193,16 @@ class _RestaurantState extends State<Restaurant> {
                 ),
                 Center(
                   child: Container(
-                    margin: EdgeInsets.only(top: 15, ),
+                    margin: EdgeInsets.only(
+                      top: 15,
+                    ),
                     width: 322,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: Color.fromARGB(255, 134, 134, 134).withOpacity(0.5),
+                          color: Color.fromARGB(255, 134, 134, 134)
+                              .withOpacity(0.5),
                           spreadRadius: 1,
                           blurRadius: 1,
                           offset: Offset(0, 1),
@@ -248,7 +253,8 @@ class _RestaurantState extends State<Restaurant> {
                               ),
                             )),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 20),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -277,7 +283,8 @@ class _RestaurantState extends State<Restaurant> {
                                   style: TextStyle(
                                     fontSize: 12,
                                     height: 1,
-                                    color: const Color.fromARGB(255, 184, 184, 184),
+                                    color: const Color.fromARGB(
+                                        255, 184, 184, 184),
                                     fontFamily: 'cambo',
                                   ),
                                 ),
@@ -291,15 +298,17 @@ class _RestaurantState extends State<Restaurant> {
                 ),
                 Center(
                   child: Container(
-                    margin: EdgeInsets.only(top: 20,),
+                    margin: EdgeInsets.only(
+                      top: 20,
+                    ),
                     width: 320,
                     height: 50,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
-                          color:
-                              Color.fromARGB(255, 134, 134, 134).withOpacity(0.5),
+                          color: Color.fromARGB(255, 134, 134, 134)
+                              .withOpacity(0.5),
                           blurRadius: 1,
                           offset: Offset(0, 2),
                         ),
@@ -318,18 +327,20 @@ class _RestaurantState extends State<Restaurant> {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(bottom: 4.0, left: 5),
+                              padding:
+                                  const EdgeInsets.only(bottom: 4.0, left: 5),
                               child: TextField(
-                                 onChanged: (value) => _runFilter(value),
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontFamily: 'Times New Roman',
-                                        ),
+                                onChanged: (value) => _runFilter(value),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'Times New Roman',
+                                ),
                                 decoration: InputDecoration(
                                   hintText: 'search restaurant.....',
                                   border: InputBorder.none,
                                   hintStyle: TextStyle(
-                                    color: const Color.fromARGB(255, 192, 192, 192),
+                                    color: const Color.fromARGB(
+                                        255, 192, 192, 192),
                                     fontSize: 15,
                                     fontFamily: 'cambo',
                                   ),
@@ -375,8 +386,8 @@ class _RestaurantState extends State<Restaurant> {
                             });
                           },
                           child: Padding(
-                            padding:
-                                EdgeInsets.symmetric(horizontal: 8.0, vertical: 7),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 7),
                             child: Container(
                               padding: EdgeInsets.only(
                                 right: 10.0,
@@ -399,22 +410,24 @@ class _RestaurantState extends State<Restaurant> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Padding(
-                                    padding:
-                                        const EdgeInsets.only(right: 8.0, left: 6),
+                                    padding: const EdgeInsets.only(
+                                        right: 8.0, left: 6),
                                     child: Container(
                                       width: 21,
                                       height: 21,
                                       decoration: BoxDecoration(
-                                        color: Color.fromARGB(255, 255, 255, 255),
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
                                         borderRadius: BorderRadius.circular(50),
                                       ),
-                                      child: Icon(countries[index].flag, size: 15),
+                                      child:
+                                          Icon(countries[index].flag, size: 15),
                                     ),
                                   ),
                                   Text(
                                     countries[index].region,
-                                    style:
-                                        TextStyle(fontSize: 12, color: Colors.grey),
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.grey),
                                   ),
                                 ],
                               ),
@@ -460,7 +473,11 @@ class _RestaurantState extends State<Restaurant> {
                               padding: EdgeInsets.symmetric(horizontal: 15.0),
                               child: GestureDetector(
                                 onTap: () {
-                                  Navigator.pushNamed(context, '/restaurantDetail');
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/restaurantDetail',
+                                    arguments: {'data': restaurants[index]},
+                                  );
                                 },
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(20),
@@ -488,7 +505,8 @@ class _RestaurantState extends State<Restaurant> {
                                             ),
                                             child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Column(
                                                   crossAxisAlignment:
@@ -497,17 +515,19 @@ class _RestaurantState extends State<Restaurant> {
                                                     SizedBox(
                                                       width: 190,
                                                       child: Text(
-                                                        restaurants[index]['name'],
+                                                        restaurants[index]
+                                                            ['name'],
                                                         style: TextStyle(
                                                             fontSize: 14,
                                                             fontFamily:
                                                                 'Times New Roman',
                                                             fontWeight:
                                                                 FontWeight.bold,
-                                                            color: Colors.black),
+                                                            color:
+                                                                Colors.black),
                                                         maxLines: 1,
-                                                        overflow:
-                                                            TextOverflow.ellipsis,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                       ),
                                                     ),
                                                     SizedBox(
@@ -520,11 +540,14 @@ class _RestaurantState extends State<Restaurant> {
                                                           fontFamily:
                                                               'Times New Roman',
                                                           color: Color.fromARGB(
-                                                              255, 122, 122, 122),
+                                                              255,
+                                                              122,
+                                                              122,
+                                                              122),
                                                         ),
                                                         maxLines: 1,
-                                                        overflow:
-                                                            TextOverflow.ellipsis,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                       ),
                                                     ),
                                                   ],
@@ -553,8 +576,10 @@ class _RestaurantState extends State<Restaurant> {
                                                     255, 255, 255, 255),
                                               ),
                                               child: Padding(
-                                                padding: const EdgeInsets.symmetric(
-                                                    horizontal: 3, vertical: 3),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 3,
+                                                        vertical: 3),
                                                 child: Column(
                                                   children: [
                                                     Text(
@@ -581,14 +606,17 @@ class _RestaurantState extends State<Restaurant> {
                                           child: Container(
                                               decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(18.0),
+                                                  topLeft:
+                                                      Radius.circular(18.0),
                                                 ),
                                                 color: Color.fromARGB(
                                                     181, 255, 255, 255),
                                               ),
                                               child: Padding(
-                                                padding: const EdgeInsets.symmetric(
-                                                    horizontal: 16, vertical: 4),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16,
+                                                        vertical: 4),
                                                 child: Row(
                                                   children: [
                                                     Icon(
@@ -651,10 +679,15 @@ class _RestaurantState extends State<Restaurant> {
                     children: List.generate(
                       _filteredRestaurants.length,
                       (index) => GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/restaurantDetail',
+                            arguments: {'data': _filteredRestaurants[index]},
+                          );
+                        },
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 3.0, horizontal: 15.0),
+                          padding: const EdgeInsets.fromLTRB( 15, 8, 15, 0),
                           child: Text(
                             _filteredRestaurants[index]['name'],
                             style: TextStyle(
@@ -755,7 +788,6 @@ Future<List<dynamic>> getRestaurants() async {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<dynamic> restaurants = data['data']['restaurants'];
-      print(restaurants);
       return restaurants;
     } else {
       return []; // Return an empty list if response status code is not 200

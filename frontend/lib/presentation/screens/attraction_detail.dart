@@ -17,6 +17,9 @@ class Attraction {
 }
 
 class AttractionDetail extends StatefulWidget {
+  final Map<String, dynamic> data;
+
+  AttractionDetail({required this.data});
   @override
   State<AttractionDetail> createState() => _AttractionDetailState();
 }
@@ -37,6 +40,12 @@ class _AttractionDetailState extends State<AttractionDetail> {
 
   @override
   Widget build(BuildContext context) {
+    final name = widget.data['name'];
+    final imagePath = 'http://localhost:5000${widget.data['image']}';
+    final description = widget.data['description'];
+    final rating = widget.data['rating'];
+    final price = widget.data['price'];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
@@ -96,12 +105,12 @@ class _AttractionDetailState extends State<AttractionDetail> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: SizedBox(
-                  width: 300,
+                  width: 330,
                   height: 400,
                   child: Stack(
                     children: [
-                      Image.asset(
-                        'assets/asella.jpeg',
+                      Image.network(
+                        imagePath,
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: double.infinity,
@@ -190,7 +199,7 @@ class _AttractionDetailState extends State<AttractionDetail> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Afar tribe man camel',
+                    name,
                     style: TextStyle(
                       fontFamily: 'cambo',
                       fontSize: 16,
@@ -205,7 +214,7 @@ class _AttractionDetailState extends State<AttractionDetail> {
                         color: Colors.amber,
                         size: 20,
                       ),
-                      Text('4.6')
+                      Text(rating.toString())
                     ],
                   ),
                 ],
@@ -301,7 +310,7 @@ class _AttractionDetailState extends State<AttractionDetail> {
             Padding(
               padding: const EdgeInsets.only(left: 35.0, top: 8, right: 30),
               child: Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam dictum mauris sed purus commodo fringilla. Praesent eu nulla lorem.',
+                description,
                 style: TextStyle(
                   fontSize: 12,
                   color: Color.fromARGB(255, 160, 160, 160),
@@ -315,7 +324,7 @@ class _AttractionDetailState extends State<AttractionDetail> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '\$150.00',
+                    '\$ $price.00',
                     style: TextStyle(
                       fontSize: 28,
                       color: Colors.black,
@@ -346,7 +355,9 @@ class _AttractionDetailState extends State<AttractionDetail> {
                             size: 24,
                             color: Color.fromARGB(255, 255, 255, 255),
                           ),
-                          SizedBox(width: 10,),
+                          SizedBox(
+                            width: 10,
+                          ),
                           Text(
                             'like now',
                             style: TextStyle(
@@ -362,7 +373,9 @@ class _AttractionDetailState extends State<AttractionDetail> {
                 ],
               ),
             ),
-            SizedBox(height: 20,)
+            SizedBox(
+              height: 20,
+            )
           ],
         ),
       ),

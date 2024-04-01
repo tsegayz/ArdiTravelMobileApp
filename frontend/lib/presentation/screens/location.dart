@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors_in_immutables
 // ignore_for_file: use_key_in_widget_constructors
 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class Attraction {
@@ -24,50 +26,81 @@ class BottomBar {
 }
 
 class Location extends StatefulWidget {
+  final Map<String, dynamic> data;
+
+  Location({required this.data});
   @override
   State<Location> createState() => _LocationState();
 }
 
 class _LocationState extends State<Location> {
-  final List<Attraction> attractions = [
-    Attraction(
-        img: 'assets/welcome.jpg',
-        title: 'Waterfall',
-        descr: 'Lorem ipsum dolor sit amet',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.7'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.5'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.9'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.1'),
-  ];
 
-  int selectedIndex = 0; // Track the selected index for category/regin
+  int selectedIndex = 0;
+  int selected = 1;
 
-  int selected = 1; // Track the selected index for bottom nav bar
+  late int id;
+  List<dynamic> locations = [];
+  List<dynamic> hotels = [];
+  List<dynamic> restaurants = [];
+
+  List<dynamic> _filteredHotels = [];
+  List<dynamic> _filteredRestaurant = [];
+  List<dynamic> _filteredLocation = [];
+
+  Future<void> fetchLocations() async {
+    List<dynamic> fetchedLocations = await getLocation();
+    setState(() {
+      locations = fetchedLocations;
+    });
+  }
+
+  Future<void> fetchHotels() async {
+    List<dynamic> fetchedHotels = await getHotels();
+    setState(() {
+      hotels = fetchedHotels;
+    });
+  }
+
+  Future<void> fetchRestaurants() async {
+    List<dynamic> fetchedRestaurants = await getRestaurants();
+    setState(() {
+      restaurants = fetchedRestaurants;
+    });
+  }
+
+  Future<void> fetchFilteredData() async {
+    List<dynamic> fetchedHotels = await getHotels();
+    setState(() {
+      hotels = fetchedHotels;
+      _filteredHotels =
+          hotels.where((hotel) => hotel['location_id'] == id).toList();
+      _filteredRestaurant = restaurants
+          .where((restaurant) => restaurant['locationtype_id'] == id)
+          .toList();
+      _filteredLocation = locations
+          .where((location) => location['location_type_id'] == id)
+          .toList();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    id = widget.data['_id'];
+    fetchHotels();
+    fetchLocations();
+    fetchRestaurants();
+    fetchFilteredData();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final region = widget.data['region'];
+    final zone = widget.data['zone'];
+    final woreda = widget.data['woreda'];
+    final imagePath = 'http://localhost:5000${widget.data['image']}';
+    final description = widget.data['description'];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
@@ -137,7 +170,7 @@ class _LocationState extends State<Location> {
                     Padding(
                       padding: const EdgeInsets.only(left: 34.0),
                       child: Text(
-                        'Abay fountain',
+                        region,
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -160,8 +193,8 @@ class _LocationState extends State<Location> {
                       height: 160,
                       child: Stack(
                         children: [
-                          Image.asset(
-                            'assets/asella.jpeg',
+                          Image.network(
+                            imagePath,
                             fit: BoxFit.cover,
                             width: double.infinity,
                             height: double.infinity,
@@ -189,7 +222,7 @@ class _LocationState extends State<Location> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Lorem ipsum dolor sit amet,  ipsum dolor ',
+                                          '$zone, $woreda',
                                           style: TextStyle(
                                             fontSize: 14,
                                             height: 1.2,
@@ -237,10 +270,10 @@ class _LocationState extends State<Location> {
                 margin: EdgeInsets.only(left: 30),
                 width: 350,
                 child: Text(
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam dictum mauris sed purus commodo fringilla. Praesent eu nulla lorem. rus commodo fringilla. Praesen',
+                  description,
                   style: TextStyle(
                     color: Colors.grey,
-                    fontSize: 12,
+                    fontSize: 9,
                   ),
                 ),
               )
@@ -274,15 +307,16 @@ class _LocationState extends State<Location> {
                     padding: const EdgeInsets.only(left: 30.0),
                     child: Row(
                       children: List.generate(
-                        attractions.length,
+                        _filteredLocation.length,
                         (index) => Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15.0),
                           child: GestureDetector(
                             onTap: () {
-                              setState(() {
-                                Navigator.pushNamed(
-                                    context, '/attractionDetail');
-                              });
+                              Navigator.pushNamed(
+                                context,
+                                '/attractionDetail',
+                                arguments: {'data': _filteredLocation[index]},
+                              );
                             },
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -294,8 +328,8 @@ class _LocationState extends State<Location> {
                                     height: 180,
                                     child: Stack(
                                       children: [
-                                        Image.asset(
-                                          attractions[index].img,
+                                        Image.network(
+                                          'http://localhost:5000${_filteredLocation[index]['image']}',
                                           fit: BoxFit.cover,
                                           width: double.infinity,
                                           height: double.infinity,
@@ -312,41 +346,13 @@ class _LocationState extends State<Location> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              attractions[index].title,
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontFamily: 'cambo',
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: 3, right: 4, bottom: 4),
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.star,
-                                                    color: Colors.amber,
-                                                    size: 12,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 2,
-                                                  ),
-                                                  Text(
-                                                    attractions[index].rating,
-                                                    style: TextStyle(
-                                                        fontSize: 10,
-                                                        color: Colors.black),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
+                                        Text(
+                                          _filteredLocation[index]['name'],
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontFamily: 'cambo',
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black),
                                         ),
                                         Row(
                                           mainAxisAlignment:
@@ -361,7 +367,7 @@ class _LocationState extends State<Location> {
                                                 Text(
                                                   'Details - location',
                                                   style: TextStyle(
-                                                    fontSize: 13,
+                                                    fontSize: 10,
                                                     fontFamily:
                                                         'Times New Roman',
                                                     color: Color.fromARGB(
@@ -373,7 +379,7 @@ class _LocationState extends State<Location> {
                                             Text(
                                               '\$150.00/person',
                                               style: TextStyle(
-                                                fontSize: 11,
+                                                fontSize: 10,
                                                 fontFamily: 'cambo',
                                                 color: Color.fromARGB(
                                                     255, 122, 122, 122),
@@ -424,12 +430,16 @@ class _LocationState extends State<Location> {
                     padding: const EdgeInsets.only(left: 30.0),
                     child: Row(
                       children: List.generate(
-                        attractions.length,
+                        _filteredHotels.length,
                         (index) => Padding(
                           padding: EdgeInsets.symmetric(horizontal: 12.0),
                           child: GestureDetector(
                             onTap: () {
-                              Navigator.pushNamed(context, '/hotel');
+                              Navigator.pushNamed(
+                                context,
+                                '/hotelDetail',
+                                arguments: {'data': _filteredHotels[index]},
+                              );
                             },
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(40),
@@ -438,8 +448,8 @@ class _LocationState extends State<Location> {
                                 height: 275,
                                 child: Stack(
                                   children: [
-                                    Image.asset(
-                                      attractions[index].img,
+                                    Image.network(
+                                      'http://localhost:5000${_filteredHotels[index]['image']}',
                                       fit: BoxFit.cover,
                                       width: double.infinity,
                                       height: double.infinity,
@@ -463,7 +473,7 @@ class _LocationState extends State<Location> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                attractions[index].title,
+                                                _filteredHotels[index]['name'],
                                                 style: TextStyle(
                                                     fontSize: 15,
                                                     fontFamily:
@@ -471,7 +481,8 @@ class _LocationState extends State<Location> {
                                                     color: Colors.white),
                                               ),
                                               Text(
-                                                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam accumsan congue quam,',
+                                                _filteredHotels[index]
+                                                    ['description'],
                                                 style: TextStyle(
                                                     fontSize: 9,
                                                     color: Colors.white),
@@ -543,12 +554,18 @@ class _LocationState extends State<Location> {
                         padding: const EdgeInsets.only(left: 40.0),
                         child: Column(
                           children: List.generate(
-                            attractions.length,
+                            _filteredRestaurant.length,
                             (index) => Padding(
                               padding: EdgeInsets.only(left: 5.0, bottom: 30),
                               child: GestureDetector(
                                 onTap: () {
-                                  setState(() {});
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/restaurant',
+                                    arguments: {
+                                      'data': _filteredRestaurant[index]
+                                    },
+                                  );
                                 },
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -556,12 +573,12 @@ class _LocationState extends State<Location> {
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(15),
                                       child: SizedBox(
-                                        width: 150,
+                                        width: 130,
                                         height: 100,
                                         child: Stack(
                                           children: [
-                                            Image.asset(
-                                              attractions[index].img,
+                                            Image.network(
+                                              'http://localhost:5000${_filteredRestaurant[index]['image']}',
                                               fit: BoxFit.cover,
                                               width: double.infinity,
                                               height: double.infinity,
@@ -574,22 +591,26 @@ class _LocationState extends State<Location> {
                                       width: 200,
                                       child: Padding(
                                         padding:
-                                            EdgeInsets.fromLTRB(8, 10, 8, 7),
+                                            EdgeInsets.fromLTRB(18, 10, 8, 7),
                                         child: Row(
                                           children: [
                                             Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  attractions[index].title,
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontFamily: 'cambo',
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Color.fromARGB(
-                                                          255, 85, 85, 85)),
+                                                SizedBox(
+                                                  width: 160,
+                                                  child: Text(
+                                                    _filteredRestaurant[index]['name'],
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontFamily: 'cambo',
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Color.fromARGB(
+                                                            255, 85, 85, 85)),
+                                                            
+                                                  ),
                                                 ),
                                                 Row(
                                                   children: [
@@ -600,7 +621,7 @@ class _LocationState extends State<Location> {
                                                     Text(
                                                       'Details - location',
                                                       style: TextStyle(
-                                                        fontSize: 14,
+                                                        fontSize: 10,
                                                         fontFamily: 'cambo',
                                                         color: Color.fromARGB(
                                                             255, 122, 122, 122),
@@ -616,9 +637,9 @@ class _LocationState extends State<Location> {
                                                   child: Row(
                                                     children: [
                                                       Text(
-                                                        'Rating ${attractions[index].rating}',
+                                                        'Rating ${_filteredRestaurant[index]['rating']}',
                                                         style: TextStyle(
-                                                            fontSize: 13,
+                                                            fontSize: 10,
                                                             fontFamily:
                                                                 'Times New Roman',
                                                             color:
@@ -630,7 +651,7 @@ class _LocationState extends State<Location> {
                                                       Icon(
                                                         Icons.star,
                                                         color: Colors.amber,
-                                                        size: 16,
+                                                        size: 14,
                                                       ),
                                                     ],
                                                   ),
@@ -657,5 +678,56 @@ class _LocationState extends State<Location> {
         ),
       ),
     );
+  }
+}
+
+Future<List<dynamic>> getLocation() async {
+  try {
+    final response =
+        await http.get(Uri.parse('http://localhost:5000/api/v1/locations'));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      List<dynamic> locations = data['data']['locations'];
+      return locations;
+    } else {
+      return [];
+    }
+  } catch (e) {
+    return [];
+  }
+}
+
+Future<List<dynamic>> getHotels() async {
+  try {
+    final response =
+        await http.get(Uri.parse('http://localhost:5000/api/v1/hotels'));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      List<dynamic> hotels = data['data']['hotels'];
+      return hotels;
+    } else {
+      return [];
+    }
+  } catch (e) {
+    return [];
+  }
+}
+
+Future<List<dynamic>> getRestaurants() async {
+  try {
+    final response =
+        await http.get(Uri.parse('http://localhost:5000/api/v1/restaurants'));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      List<dynamic> restaurants = data['data']['restaurants'];
+      return restaurants;
+    } else {
+      return [];
+    }
+  } catch (e) {
+    return [];
   }
 }

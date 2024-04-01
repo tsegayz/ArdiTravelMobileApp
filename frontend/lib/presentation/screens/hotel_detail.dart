@@ -45,38 +45,6 @@ class HotelDetail extends StatefulWidget {
 }
 
 class _HotelDetailState extends State<HotelDetail> {
-  final List<Attraction> attractions = [
-    Attraction(
-        img: 'assets/welcome.jpg',
-        title: 'Waterfall',
-        descr: 'Lorem ipsum dolor sit amet',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.6'),
-    Attraction(
-        img: 'assets/asella.jpeg',
-        title: 'Watterfall',
-        descr: 'Lorem ipsum dolor sit amet ',
-        rating: '4.6'),
-  ];
 
   final List<Category> amenities = [
     Category(
@@ -99,37 +67,33 @@ class _HotelDetailState extends State<HotelDetail> {
 
   int selectedIndex = 0;
 
+  late int id;
   int selected = 2;
+  List<dynamic> hotelRoom = [];
+  List<dynamic> filteredHotelRoom = [];
+
+  Future<void> fetchHotelRoom() async {
+    List<dynamic> fetchedHotelRoom = await getHotelRoom();
+    setState(() {
+      hotelRoom = fetchedHotelRoom;
+      filteredHotelRoom =
+          hotelRoom.where((room) => room['hotel_id'] == id).toList();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    id = widget.data['_id'];
+    fetchHotelRoom();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final id = widget.data['_id'];
     final name = widget.data['name'];
     final imagePath = 'http://localhost:5000${widget.data['image']}';
     final description = widget.data['description'];
     final rating = widget.data['rating'];
-
-    final Map<String, dynamic> pics;
-
-    List<dynamic> hotelRoom = [];
-    List<dynamic> filteredHotelRoom = [];
-
-    Future<void> fetchHotelRoom() async {
-      List<dynamic> fetchedHotelRoom = await getHotelRoom();
-      setState(() {
-        hotelRoom = fetchedHotelRoom;
-      });
-    }
-
-    @override
-    void initState() {
-      super.initState();
-      fetchHotelRoom();
-    }
-
-    void runFilter(String word) {
-
-    }
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -375,30 +339,30 @@ class _HotelDetailState extends State<HotelDetail> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: List.generate(
-                        attractions.length,
+                        filteredHotelRoom.length,
                         (index) => Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/location');
-                            },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: SizedBox(
-                                width: 80,
-                                height: 80,
-                                child: Stack(
-                                  children: [
-                                    Image.asset(
-                                      attractions[index].img,
-                                      fit: BoxFit.cover,
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                    ),
-                                  ],
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Column(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: SizedBox(
+                                  width: 80,
+                                  height: 80,
+                                  child: Image.network(
+                                    'http://localhost:5000${filteredHotelRoom[index]['image']}',
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                            ),
+                              SizedBox(height: 3,),
+                              Text(
+                                filteredHotelRoom[index]['type'],
+                                style: TextStyle(fontSize: 12),
+                              )
+                            ],
                           ),
                         ),
                       ),
@@ -408,7 +372,7 @@ class _HotelDetailState extends State<HotelDetail> {
               ],
             ),
             SizedBox(
-              height: 20,
+              height: 15,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 28.0, top: 20, right: 30),
@@ -486,16 +450,16 @@ class _HotelDetailState extends State<HotelDetail> {
 Future<List<dynamic>> getHotelRoom() async {
   try {
     final response =
-        await http.get(Uri.parse('http://localhost:5000/api/v1/hotels'));
+        await http.get(Uri.parse('http://localhost:5000/api/v1/hotelRoom'));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      List<dynamic> hotels = data['data']['hotels'];
-      return hotels;
+      List<dynamic> hotelRooms = data['data']['hotelRooms'];
+      return hotelRooms;
     } else {
-      return []; // Return an empty list if response status code is not 200
+      return [];
     }
   } catch (e) {
-    return []; // Return an empty list if an error occurs
+    return [];
   }
 }
